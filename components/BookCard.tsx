@@ -4,6 +4,7 @@ import BookCover from "@/components/BookCover";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import dayjs from "dayjs";
 
 const BookCard = ({
   id,
@@ -12,6 +13,10 @@ const BookCard = ({
   coverColor,
   coverUrl,
   isLoanedBook = false,
+  dueDate,
+  borrowStatus,
+  riskLevel,
+  riskScore,
 }: Book) => (
   <li className={cn(isLoanedBook && "xs:w-52 w-full")}>
     <Link
@@ -35,10 +40,26 @@ const BookCard = ({
               height={18}
               className="object-contain"
             />
-            <p className="text-light-100">11 days left to return</p>
+            <p className="text-light-100">
+              {dueDate
+                ? `${Math.max(dayjs(dueDate).diff(dayjs(), "day"), 0)} days left to return`
+                : "Borrowed"}
+            </p>
           </div>
 
-          <Button className="book-btn">Download receipt</Button>
+          <div className="mt-3 space-y-2">
+            {borrowStatus ? (
+              <p className="text-sm text-light-100">Status: {borrowStatus}</p>
+            ) : null}
+            {riskLevel ? (
+              <p className="text-sm text-light-100">
+                Risk: {riskLevel}
+                {typeof riskScore === "number" ? ` (${riskScore})` : ""}
+              </p>
+            ) : null}
+          </div>
+
+          <Button className="book-btn">View details</Button>
         </div>
       )}
     </Link>

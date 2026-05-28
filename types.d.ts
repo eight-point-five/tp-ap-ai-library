@@ -12,6 +12,12 @@ interface Book {
   videoUrl: string;
   summary: string;
   createdAt: Date | null;
+  isLoanedBook?: boolean;
+  dueDate?: string | Date | null;
+  borrowDate?: string | Date | null;
+  borrowStatus?: string;
+  riskLevel?: RiskLevel | null;
+  riskScore?: number | null;
 }
 
 interface AuthCredentials {
@@ -39,3 +45,7 @@ interface BorrowBookParams {
   bookId: string;
   userId: string;
 }
+
+type RiskLevel = "LOW" | "MEDIUM" | "HIGH";
+type RiskDecision = "ALLOW" | "REVIEW" | "BLOCK";
+type RiskEventType = "BORROW" | "RENEW" | "RETURN";

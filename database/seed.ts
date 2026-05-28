@@ -1,67 +1,44 @@
-import dummyBooks from "../dummybooks.json";
-import ImageKit from "imagekit";
-import { books } from "@/database/schema";
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
 import { config } from "dotenv";
+import { eq } from "drizzle-orm";
+import { db } from "@/database/drizzle";
+import { books } from "@/database/schema";
+import dummyBooks from "../dummybooks.json";
 
 config({ path: ".env.local" });
 
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle({ client: sql });
+async function seed() {
+  console.log("Seeding local books...");
 
-const imagekit = new ImageKit({
-  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
-  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!,
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
-});
+  for (const book of dummyBooks) {
+    const existing = await db
+      .select({ id: books.id })
+      .from(books)
+      .where(eq(books.title, book.title))
+      .limit(1);
 
-const uploadToImageKit = async (
-  url: string,
-  fileName: string,
-  folder: string,
-) => {
-  try {
-    const response = await imagekit.upload({
-      file: url,
-      fileName,
-      folder,
-    });
-
-    return response.filePath;
-  } catch (error) {
-    console.error("Error uploading image to ImageKit:", error);
-  }
-};
-
-const seed = async () => {
-  console.log("Seeding data...");
-
-  try {
-    for (const book of dummyBooks) {
-      const coverUrl = (await uploadToImageKit(
-        book.coverUrl,
-        `${book.title}.jpg`,
-        "/books/covers",
-      )) as string;
-
-      const videoUrl = (await uploadToImageKit(
-        book.videoUrl,
-        `${book.title}.mp4`,
-        "/books/videos",
-      )) as string;
-
-      await db.insert(books).values({
-        ...book,
-        coverUrl,
-        videoUrl,
-      });
+    if (existing.length > 0) {
+      continue;
     }
 
-    console.log("Data seeded successfully!");
-  } catch (error) {
-    console.error("Error seeding data:", error);
+    await db.insert(books).values({
+      title: book.title,
+      author: book.author,
+      genre: book.genre,
+      rating: book.rating,
+      coverUrl: book.coverUrl,
+      coverColor: book.coverColor,
+      description: book.description,
+      totalCopies: book.totalCopies,
+      availableCopies: book.availableCopies,
+      videoUrl: book.videoUrl,
+      summary: book.summary,
+    });
   }
-};
 
-seed();
+  console.log(`Seeded ${dummyBooks.length} books.`);
+}
+
+seed().catch((error) => {
+  console.error("Error seeding books:", error);
+  process.exit(1);
+});

@@ -4,6 +4,7 @@ import { db } from "@/database/drizzle";
 import { books, borrowRecords } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import dayjs from "dayjs";
+import { evaluateBorrowRisk } from "@/lib/risk/service";
 
 export const borrowBook = async (params: BorrowBookParams) => {
   const { userId, bookId } = params;
@@ -22,19 +23,31 @@ export const borrowBook = async (params: BorrowBookParams) => {
       };
     }
 
-    const dueDate = dayjs().add(7, "day").toDate().toDateString();
+    const dueDate = dayjs().add(7, "day").format("YYYY-MM-DD");
 
-    const record = await db.insert(borrowRecords).values({
-      userId,
-      bookId,
-      dueDate,
-      status: "BORROWED",
-    });
+    const [record] = await db
+      .insert(borrowRecords)
+      .values({
+        userId,
+        bookId,
+        dueDate,
+        status: "BORROWED",
+      })
+      .returning({ id: borrowRecords.id });
 
     await db
       .update(books)
       .set({ availableCopies: book[0].availableCopies - 1 })
       .where(eq(books.id, bookId));
+
+    if (record?.id) {
+      await evaluateBorrowRisk({
+        userId,
+        bookId,
+        borrowRecordId: record.id,
+        eventType: "BORROW",
+      });
+    }
 
     return {
       success: true,
