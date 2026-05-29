@@ -26,12 +26,12 @@ const Header = async ({ session }: { session: Session }) => {
       <ul className="flex flex-row items-center gap-5 text-light-100">
         <li>
           <Link href="/" className="font-medium hover:text-primary">
-            Home
+            首页
           </Link>
         </li>
         <li>
           <Link href="/my-profile" className="font-medium hover:text-primary">
-            My Profile
+            个人中心
           </Link>
         </li>
         {isAdmin ? (
@@ -40,7 +40,7 @@ const Header = async ({ session }: { session: Session }) => {
               href="/admin/risk-dashboard"
               className="font-medium text-primary hover:text-light-200"
             >
-              Risk Dashboard
+              风险仪表盘
             </Link>
           </li>
         ) : null}
@@ -52,7 +52,7 @@ const Header = async ({ session }: { session: Session }) => {
               await signOut();
             }}
           >
-            <Button>Logout</Button>
+            <Button>退出登录</Button>
           </form>
         </li>
       </ul>

@@ -8,9 +8,9 @@ const RiskTrendChart = ({
   return (
     <div className="rounded-2xl bg-white p-7">
       <div className="mb-5">
-        <h3 className="text-lg font-semibold text-dark-400">Risk Events in Last 7 Days</h3>
+        <h3 className="text-lg font-semibold text-dark-400">近7天风险事件</h3>
         <p className="text-sm text-light-500">
-          A simple AP-focused trend view for the local demo.
+          面向本地演示的 AP 趋势视图。
         </p>
       </div>
 

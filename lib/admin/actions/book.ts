@@ -22,7 +22,7 @@ export const createBook = async (params: BookParams) => {
 
     return {
       success: false,
-      message: "An error occurred while creating the book",
+      message: "创建图书时发生错误",
     };
   }
 };

@@ -74,8 +74,8 @@ const FileUpload = ({
     console.log(error);
 
     toast({
-      title: `${type} upload failed`,
-      description: `Your ${type} could not be uploaded. Please try again.`,
+      title: `${type === "image" ? "图片" : "视频"}上传失败`,
+      description: `${type === "image" ? "图片" : "视频"}上传失败，请重试。`,
       variant: "destructive",
     });
   };
@@ -85,8 +85,8 @@ const FileUpload = ({
     onFileChange(res.filePath);
 
     toast({
-      title: `${type} uploaded successfully`,
-      description: `${res.filePath} uploaded successfully!`,
+      title: `${type === "image" ? "图片" : "视频"}上传成功`,
+      description: `${res.filePath} 上传成功！`,
     });
   };
 
@@ -94,8 +94,8 @@ const FileUpload = ({
     if (type === "image") {
       if (file.size > 20 * 1024 * 1024) {
         toast({
-          title: "File size too large",
-          description: "Please upload a file that is less than 20MB in size",
+          title: "文件过大",
+          description: "请上传小于 20MB 的文件",
           variant: "destructive",
         });
 
@@ -104,8 +104,8 @@ const FileUpload = ({
     } else if (type === "video") {
       if (file.size > 50 * 1024 * 1024) {
         toast({
-          title: "File size too large",
-          description: "Please upload a file that is less than 50MB in size",
+          title: "文件过大",
+          description: "请上传小于 50MB 的文件",
           variant: "destructive",
         });
         return false;

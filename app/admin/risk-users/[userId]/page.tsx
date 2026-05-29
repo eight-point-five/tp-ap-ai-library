@@ -17,7 +17,7 @@ const Page = async ({
     return (
       <section className="rounded-2xl bg-white p-7">
         <h2 className="text-xl font-semibold text-dark-400">
-          No risk profile was found for this user.
+          未找到该用户的风险档案。
         </h2>
       </section>
     );
@@ -30,7 +30,7 @@ const Page = async ({
   return (
     <section className="space-y-7">
       <Button asChild className="back-btn">
-        <Link href="/admin/risk-dashboard">Back to risk dashboard</Link>
+        <Link href="/admin/risk-dashboard">返回风险仪表盘</Link>
       </Button>
 
       <div className="rounded-2xl bg-white p-7">
@@ -52,25 +52,25 @@ const Page = async ({
 
         <div className="mt-7 grid gap-4 md:grid-cols-4">
           <div className="rounded-xl bg-light-600 p-4">
-            <p className="text-sm text-light-500">Total Borrows</p>
+            <p className="text-sm text-light-500">累计借阅</p>
             <p className="mt-2 text-2xl font-semibold text-dark-400">
               {detail.profile.totalBorrowCount}
             </p>
           </div>
           <div className="rounded-xl bg-light-600 p-4">
-            <p className="text-sm text-light-500">Active Borrows</p>
+            <p className="text-sm text-light-500">当前在借</p>
             <p className="mt-2 text-2xl font-semibold text-dark-400">
               {detail.profile.activeBorrowCount}
             </p>
           </div>
           <div className="rounded-xl bg-light-600 p-4">
-            <p className="text-sm text-light-500">Overdue Count</p>
+            <p className="text-sm text-light-500">逾期次数</p>
             <p className="mt-2 text-2xl font-semibold text-dark-400">
               {detail.profile.overdueCount}
             </p>
           </div>
           <div className="rounded-xl bg-light-600 p-4">
-            <p className="text-sm text-light-500">Recent 24h Borrows</p>
+            <p className="text-sm text-light-500">近24小时借阅</p>
             <p className="mt-2 text-2xl font-semibold text-dark-400">
               {detail.profile.recent24hBorrowCount}
             </p>
@@ -80,28 +80,28 @@ const Page = async ({
 
       <div className="grid gap-7 xl:grid-cols-[1fr_1fr]">
         <div className="rounded-2xl bg-white p-7">
-          <h3 className="text-lg font-semibold text-dark-400">Triggered Rules</h3>
+          <h3 className="text-lg font-semibold text-dark-400">触发规则</h3>
           <div className="mt-5">
             <RiskReasonList reasons={latestReasons} />
           </div>
         </div>
 
         <div className="rounded-2xl bg-white p-7">
-          <h3 className="text-lg font-semibold text-dark-400">System Suggestion</h3>
+          <h3 className="text-lg font-semibold text-dark-400">系统建议</h3>
           <div className="mt-5 rounded-xl border border-light-400 bg-light-600 p-4">
             <p className="text-sm text-light-500">
               {detail.events[0]?.explanation ||
-                "No recent risk events were found for this user."}
+                "未找到该用户近期的风险事件。"}
             </p>
           </div>
         </div>
       </div>
 
       <div className="rounded-2xl bg-white p-7">
-        <h3 className="text-lg font-semibold text-dark-400">Risk Event History</h3>
+        <h3 className="text-lg font-semibold text-dark-400">风险事件历史</h3>
         <div className="mt-5 space-y-4">
           {detail.events.length === 0 ? (
-            <p className="text-sm text-light-500">No risk events yet.</p>
+            <p className="text-sm text-light-500">暂无风险事件。</p>
           ) : (
             detail.events.map((event) => (
               <article
@@ -120,7 +120,7 @@ const Page = async ({
                 <p className="mt-2 text-sm text-light-500">
                   {event.createdAt
                     ? dayjs(event.createdAt).format("YYYY-MM-DD HH:mm")
-                    : "Unknown time"}
+                    : "未知时间"}
                 </p>
                 <p className="mt-3 text-sm text-light-500">{event.explanation}</p>
               </article>
@@ -130,10 +130,10 @@ const Page = async ({
       </div>
 
       <div className="rounded-2xl bg-white p-7">
-        <h3 className="text-lg font-semibold text-dark-400">Borrow Timeline</h3>
+        <h3 className="text-lg font-semibold text-dark-400">借阅时间线</h3>
         <div className="mt-5 space-y-4">
           {detail.borrowTimeline.length === 0 ? (
-            <p className="text-sm text-light-500">No borrow records yet.</p>
+            <p className="text-sm text-light-500">暂无借阅记录。</p>
           ) : (
             detail.borrowTimeline.map((record) => (
               <article
@@ -145,16 +145,16 @@ const Page = async ({
                   <p className="text-sm text-light-500">{record.status}</p>
                 </div>
                 <p className="mt-2 text-sm text-light-500">
-                  Borrowed at:{" "}
+                  借阅时间：{" "}
                   {record.borrowDate
                     ? dayjs(record.borrowDate).format("YYYY-MM-DD HH:mm")
-                    : "Unknown"}
+                    : "未知"}
                 </p>
                 <p className="mt-1 text-sm text-light-500">
-                  Due date: {String(record.dueDate)}
+                  应还日期：{String(record.dueDate)}
                 </p>
                 <p className="mt-1 text-sm text-light-500">
-                  Returned at: {record.returnDate ? String(record.returnDate) : "Not returned"}
+                  归还时间：{record.returnDate ? String(record.returnDate) : "未归还"}
                 </p>
               </article>
             ))

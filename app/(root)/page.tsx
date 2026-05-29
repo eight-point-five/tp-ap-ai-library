@@ -21,18 +21,17 @@ const Home = async () => {
           Demo Flow
         </p>
         <p className="mt-3 text-lg font-semibold">
-          Borrow a book here, then open My Profile to see the saved borrow record.
+          在此借阅图书，然后打开个人中心查看借阅记录。
         </p>
         <p className="mt-2 text-sm text-light-100/80">
-          If you are logged in as admin, open Risk Dashboard to see the risk event,
-          user profile updates, and natural language query panel.
+          如以管理员身份登录，请打开风险仪表盘查看风险事件、用户档案更新及自然语言查询面板。
         </p>
       </div>
 
       <BookOverview {...latestBooks[0]} userId={session?.user?.id as string} />
 
       <BookList
-        title="Latest Books"
+        title="最新上架"
         books={latestBooks.slice(1)}
         containerClassName="mt-28"
       />

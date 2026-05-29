@@ -34,14 +34,14 @@ const NaturalLanguageQueryBox = () => {
       const payload = await response.json();
 
       if (!response.ok) {
-        setError(payload.error || "Query failed");
+        setError(payload.error || "查询失败");
         setResult(null);
         return;
       }
 
       setResult(payload);
     } catch {
-      setError("The natural language query endpoint is unavailable.");
+      setError("自然语言查询接口暂不可用。");
       setResult(null);
     } finally {
       setLoading(false);
@@ -52,10 +52,10 @@ const NaturalLanguageQueryBox = () => {
     <section className="rounded-2xl bg-white p-7">
       <div className="mb-5">
         <h3 className="text-lg font-semibold text-dark-400">
-          Natural Language Query
+          自然语言查询
         </h3>
         <p className="text-sm text-light-500">
-          Try queries like "查询高风险用户" or "查询24小时内借书超过5次的用户".
+          尝试输入"查询高风险用户"或"查询24小时内借书超过5次的用户"等查询语句。
         </p>
       </div>
 
@@ -64,10 +64,10 @@ const NaturalLanguageQueryBox = () => {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           className="book-form_input"
-          placeholder="Type a natural language query"
+          placeholder="请输入自然语言查询"
         />
         <Button onClick={handleSubmit} className="bg-primary-admin text-white">
-          {loading ? "Running..." : "Run query"}
+          {loading ? "查询中..." : "执行查询"}
         </Button>
       </div>
 
@@ -77,18 +77,18 @@ const NaturalLanguageQueryBox = () => {
         <div className="mt-6 space-y-4">
           <div className="rounded-xl border border-light-400 bg-light-600 p-4 text-sm text-dark-400">
             <p>
-              <span className="font-semibold">Parsed intent:</span>{" "}
+              <span className="font-semibold">解析意图：</span>{" "}
               {result.parsedIntent}
             </p>
             <p className="mt-2">
-              <span className="font-semibold">Explanation:</span>{" "}
+              <span className="font-semibold">解释说明：</span>{" "}
               {result.explanation}
             </p>
           </div>
 
           <div className="space-y-3">
             {result.results.length === 0 ? (
-              <p className="text-sm text-light-500">No matching records were found.</p>
+              <p className="text-sm text-light-500">未找到匹配的记录。</p>
             ) : (
               result.results.map((item, index) => (
                 <pre

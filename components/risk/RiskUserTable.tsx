@@ -16,29 +16,29 @@ const RiskUserTable = ({ users }: { users: RiskUserRow[] }) => {
   return (
     <div className="overflow-x-auto rounded-2xl bg-white p-7">
       <div className="mb-5">
-        <h3 className="text-lg font-semibold text-dark-400">High Risk Users</h3>
+        <h3 className="text-lg font-semibold text-dark-400">高风险用户</h3>
         <p className="text-sm text-light-500">
-          These users should be reviewed by an admin first.
+          以下用户需要管理员优先审核。
         </p>
       </div>
 
       <table className="min-w-full text-left">
         <thead>
           <tr className="border-b border-light-400 text-sm text-light-500">
-            <th className="py-3 pr-4">User</th>
-            <th className="py-3 pr-4">Score</th>
-            <th className="py-3 pr-4">Level</th>
-            <th className="py-3 pr-4">Active</th>
-            <th className="py-3 pr-4">Overdue</th>
-            <th className="py-3 pr-4">24h Borrows</th>
-            <th className="py-3">Action</th>
+            <th className="py-3 pr-4">用户</th>
+            <th className="py-3 pr-4">评分</th>
+            <th className="py-3 pr-4">等级</th>
+            <th className="py-3 pr-4">在借</th>
+            <th className="py-3 pr-4">逾期</th>
+            <th className="py-3 pr-4">24h借阅</th>
+            <th className="py-3">操作</th>
           </tr>
         </thead>
         <tbody>
           {users.length === 0 ? (
             <tr>
               <td className="py-6 text-sm text-light-500" colSpan={7}>
-                No high risk users yet.
+                暂无高风险用户。
               </td>
             </tr>
           ) : (
@@ -62,7 +62,7 @@ const RiskUserTable = ({ users }: { users: RiskUserRow[] }) => {
                     href={`/admin/risk-users/${user.userId}`}
                     className="font-semibold text-primary-admin"
                   >
-                    View details
+                    查看详情
                   </Link>
                 </td>
               </tr>

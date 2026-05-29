@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   const queryText = String(body?.query || "").trim();
 
   if (!queryText) {
-    return NextResponse.json({ error: "query is required" }, { status: 400 });
+    return NextResponse.json({ error: "请输入查询内容" }, { status: 400 });
   }
 
   const parsed = parseNaturalLanguageQuery(queryText);

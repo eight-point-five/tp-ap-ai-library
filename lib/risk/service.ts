@@ -202,15 +202,15 @@ export async function getBorrowingEligibility(userId: string) {
     .limit(1);
 
   if (!profile) {
-    return { isEligible: true, message: "Eligible to borrow" };
+    return { isEligible: true, message: "符合借阅条件" };
   }
 
   if (profile.currentLevel === "HIGH" && profile.activeBorrowCount >= 10) {
     return {
       isEligible: false,
-      message: "High risk users with too many active borrows require admin review.",
+      message: "高风险用户在借数量过多，需管理员审核。",
     };
   }
 
-  return { isEligible: true, message: "Eligible to borrow" };
+  return { isEligible: true, message: "符合借阅条件" };
 }

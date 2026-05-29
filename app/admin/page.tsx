@@ -8,24 +8,23 @@ const Page = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-admin">
-            Admin Console
+            管理控制台
           </p>
           <h2 className="mt-3 text-3xl font-semibold text-dark-400">
-            Local TP + AP + AI Demo Entry
+            本地 TP + AP + AI 演示入口
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-light-500">
-            This admin home keeps the original library management entry points and
-            adds the risk dashboard as the main browser demo surface.
+            此管理首页保留原有图书管理入口，并将风险仪表盘作为主要演示界面。
           </p>
         </div>
         <div className="flex gap-3">
           <Button className="bg-primary-admin" asChild>
             <Link href="/admin/risk-dashboard" className="text-white">
-              Open risk dashboard
+              打开风险仪表盘
             </Link>
           </Button>
           <Button className="bg-light-300 text-primary-admin shadow-none" asChild>
-            <Link href="/admin/books">Browse books</Link>
+            <Link href="/admin/books">浏览图书</Link>
           </Button>
         </div>
       </div>
@@ -36,10 +35,10 @@ const Page = () => {
           className="rounded-2xl border border-light-400 bg-light-600 p-6"
         >
           <p className="text-lg font-semibold text-dark-400">
-            Risk analytics and NLQ
+            风险分析与自然语言查询
           </p>
           <p className="mt-3 text-sm text-light-500">
-            Review high-risk users, risk events, event trends, and run natural language queries.
+            查看高风险用户、风险事件、事件趋势，并执行自然语言查询。
           </p>
         </Link>
         <Link
@@ -47,10 +46,10 @@ const Page = () => {
           className="rounded-2xl border border-light-400 bg-light-600 p-6"
         >
           <p className="text-lg font-semibold text-dark-400">
-            Books and borrow management
+            图书与借阅管理
           </p>
           <p className="mt-3 text-sm text-light-500">
-            Keep using the original library management flows that generate TP data for risk analysis.
+            继续使用原有的图书管理流程，为风险分析生成 TP 数据。
           </p>
         </Link>
       </div>

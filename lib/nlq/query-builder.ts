@@ -16,7 +16,7 @@ export async function runParsedNaturalLanguageQuery(
   userId?: string,
 ) {
   let results: unknown[] = [];
-  let generatedQuerySummary = "No executable natural language rule was matched.";
+  let generatedQuerySummary = "未匹配到可执行的自然语言规则。";
 
   if (parsed.intent === "USER_RISK_LIST") {
     const filters: SQL[] = [];
@@ -71,7 +71,7 @@ export async function runParsedNaturalLanguageQuery(
       .orderBy(desc(userRiskProfiles.currentScore))
       .limit(20);
 
-    generatedQuerySummary = "Filtered user risk profiles based on parsed risk conditions.";
+    generatedQuerySummary = "根据解析的风险条件筛选用户风险档案。";
   }
 
   if (parsed.intent === "RISK_EVENT_LIST") {
@@ -96,7 +96,7 @@ export async function runParsedNaturalLanguageQuery(
       .orderBy(desc(borrowRiskEvents.createdAt))
       .limit(20);
 
-    generatedQuerySummary = `Fetched risk events created in the last ${days} days.`;
+    generatedQuerySummary = `获取了最近 ${days} 天内生成的风险事件。`;
   }
 
   await db.insert(nlqLogs).values({

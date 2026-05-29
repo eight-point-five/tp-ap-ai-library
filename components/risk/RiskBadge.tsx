@@ -6,6 +6,12 @@ const levelClassName: Record<RiskLevel, string> = {
   HIGH: "bg-red-100 text-red-800",
 };
 
+const levelLabel: Record<RiskLevel, string> = {
+  LOW: "低",
+  MEDIUM: "中",
+  HIGH: "高",
+};
+
 const RiskBadge = ({ level }: { level: RiskLevel }) => {
   return (
     <span
@@ -14,7 +20,7 @@ const RiskBadge = ({ level }: { level: RiskLevel }) => {
         levelClassName[level],
       )}
     >
-      {level}
+      {levelLabel[level]}
     </span>
   );
 };

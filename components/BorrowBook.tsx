@@ -27,7 +27,7 @@ const BorrowBook = ({
   const handleBorrowBook = async () => {
     if (!isEligible) {
       toast({
-        title: "Error",
+        title: "操作失败",
         description: message,
         variant: "destructive",
       });
@@ -41,22 +41,22 @@ const BorrowBook = ({
 
       if (result.success) {
         toast({
-          title: "Success",
-          description: "Book borrowed successfully",
+          title: "操作成功",
+          description: "借阅成功",
         });
 
         router.push("/");
       } else {
         toast({
-          title: "Error",
+          title: "操作失败",
           description: result.error,
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "An error occurred while borrowing the book",
+        title: "操作失败",
+        description: "借阅过程中发生错误",
         variant: "destructive",
       });
     } finally {
@@ -72,7 +72,7 @@ const BorrowBook = ({
     >
       <Image src="/icons/book.svg" alt="book" width={20} height={20} />
       <p className="font-bebas-neue text-xl text-dark-100">
-        {borrowing ? "Borrowing ..." : "Borrow Book"}
+        {borrowing ? "借阅中..." : "借阅此书"}
       </p>
     </Button>
   );

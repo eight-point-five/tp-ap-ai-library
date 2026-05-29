@@ -26,7 +26,7 @@ const bebasNeue = localFont({
 export const metadata: Metadata = {
   title: "BookWise",
   description:
-    "BookWise is a book borrowing university library management solution.",
+    "BookWise 是一款面向高校的图书借阅管理解决方案。",
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {

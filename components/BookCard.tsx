@@ -42,24 +42,24 @@ const BookCard = ({
             />
             <p className="text-light-100">
               {dueDate
-                ? `${Math.max(dayjs(dueDate).diff(dayjs(), "day"), 0)} days left to return`
-                : "Borrowed"}
+                ? `剩余 ${Math.max(dayjs(dueDate).diff(dayjs(), "day"), 0)} 天需归还`
+                : "已借出"}
             </p>
           </div>
 
           <div className="mt-3 space-y-2">
             {borrowStatus ? (
-              <p className="text-sm text-light-100">Status: {borrowStatus}</p>
+              <p className="text-sm text-light-100">状态：{borrowStatus}</p>
             ) : null}
             {riskLevel ? (
               <p className="text-sm text-light-100">
-                Risk: {riskLevel}
+                风险：{riskLevel}
                 {typeof riskScore === "number" ? ` (${riskScore})` : ""}
               </p>
             ) : null}
           </div>
 
-          <Button className="book-btn">View details</Button>
+          <Button className="book-btn">查看详情</Button>
         </div>
       )}
     </Link>

@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
   if (!userId || !bookId) {
     return NextResponse.json(
-      { error: "userId and bookId are required" },
+      { error: "userId 和 bookId 为必填参数" },
       { status: 400 },
     );
   }

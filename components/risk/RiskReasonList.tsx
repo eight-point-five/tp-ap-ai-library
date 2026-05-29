@@ -10,7 +10,7 @@ const RiskReasonList = ({
   reasons: Array<RiskReasonListItem | Record<string, unknown>>;
 }) => {
   if (!reasons.length) {
-    return <p className="text-sm text-light-500">No risk reasons available.</p>;
+    return <p className="text-sm text-light-500">暂无风险原因数据。</p>;
   }
 
   return (

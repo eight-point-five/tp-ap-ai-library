@@ -50,14 +50,14 @@ const BookForm = ({ type, ...book }: Props) => {
 
     if (result.success) {
       toast({
-        title: "Success",
-        description: "Book created successfully",
+        title: "操作成功",
+        description: "图书创建成功",
       });
 
       router.push(`/admin/books/${result.data.id}`);
     } else {
       toast({
-        title: "Error",
+        title: "操作失败",
         description: result.message,
         variant: "destructive",
       });
@@ -73,12 +73,12 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Book Title
+                书名
               </FormLabel>
               <FormControl>
                 <Input
                   required
-                  placeholder="Book title"
+                  placeholder="请输入书名"
                   {...field}
                   className="book-form_input"
                 />
@@ -93,12 +93,12 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Author
+                作者
               </FormLabel>
               <FormControl>
                 <Input
                   required
-                  placeholder="Book author"
+                  placeholder="请输入作者"
                   {...field}
                   className="book-form_input"
                 />
@@ -113,12 +113,12 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Genre
+                分类
               </FormLabel>
               <FormControl>
                 <Input
                   required
-                  placeholder="Book genre"
+                  placeholder="请输入分类"
                   {...field}
                   className="book-form_input"
                 />
@@ -134,14 +134,14 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Rating
+                评分
               </FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   min={1}
                   max={5}
-                  placeholder="Book rating"
+                  placeholder="请输入评分"
                   {...field}
                   className="book-form_input"
                 />
@@ -157,14 +157,14 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Total Copies
+                馆藏数量
               </FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   min={1}
                   max={10000}
-                  placeholder="Total copies"
+                  placeholder="请输入馆藏数量"
                   {...field}
                   className="book-form_input"
                 />
@@ -180,13 +180,13 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Book Image
+                图书封面
               </FormLabel>
               <FormControl>
                 <FileUpload
                   type="image"
                   accept="image/*"
-                  placeholder="Upload a book cover"
+                  placeholder="上传图书封面"
                   folder="books/covers"
                   variant="light"
                   onFileChange={field.onChange}
@@ -203,7 +203,7 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Primary Color
+                主题色
               </FormLabel>
               <FormControl>
                 <ColorPicker
@@ -221,11 +221,11 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Book Description
+                图书简介
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Book description"
+                  placeholder="请输入图书简介"
                   {...field}
                   rows={10}
                   className="book-form_input"
@@ -243,13 +243,13 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Book Trailer
+                图书预告片
               </FormLabel>
               <FormControl>
                 <FileUpload
                   type="video"
                   accept="video/*"
-                  placeholder="Upload a book trailer"
+                  placeholder="上传图书预告片"
                   folder="books/videos"
                   variant="light"
                   onFileChange={field.onChange}
@@ -266,11 +266,11 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Book Summary
+                内容摘要
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Book summary"
+                  placeholder="请输入内容摘要"
                   {...field}
                   rows={5}
                   className="book-form_input"
@@ -283,7 +283,7 @@ const BookForm = ({ type, ...book }: Props) => {
         />
 
         <Button type="submit" className="book-form_btn text-white">
-          Add Book to Library
+          添加图书
         </Button>
       </form>
     </Form>

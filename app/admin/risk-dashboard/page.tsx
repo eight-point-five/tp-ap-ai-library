@@ -19,37 +19,36 @@ const Page = async () => {
     <section className="space-y-7">
       <div className="rounded-2xl bg-white p-7">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-admin">
-          Library Risk Intelligence System
+          图书馆风险智能系统
         </p>
         <h2 className="mt-3 text-3xl font-semibold text-dark-400">
-          Natural Language Driven TP + AP + AI Database Demo
+          自然语言驱动的 TP + AP + AI 数据库演示
         </h2>
         <p className="mt-3 max-w-3xl text-sm text-light-500">
-          This page is the browser demo entry for transaction processing,
-          analytical processing, and rule-based AI risk evaluation.
+          本页面为事务处理、分析处理与规则式 AI 风险评估的浏览器演示入口。
         </p>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         <RiskScoreCard
-          label="High Risk Users"
+          label="高风险用户"
           value={data.overview.highRiskUsers}
-          hint="Users that need manual review first"
+          hint="需要优先人工审核的用户"
         />
         <RiskScoreCard
-          label="Medium Risk Users"
+          label="中风险用户"
           value={data.overview.mediumRiskUsers}
-          hint="Users that should stay under observation"
+          hint="需要持续观察的用户"
         />
         <RiskScoreCard
-          label="Today Abnormal Events"
+          label="今日异常事件"
           value={data.overview.todayAbnormalEvents}
-          hint="Risk snapshots created today"
+          hint="今日创建的风险快照"
         />
         <RiskScoreCard
-          label="Recent Events"
+          label="近期事件"
           value={data.recentEvents.length}
-          hint="Latest events shown on this dashboard"
+          hint="此仪表盘展示的最新事件"
         />
       </div>
 
@@ -60,15 +59,15 @@ const Page = async () => {
       <div className="grid gap-7 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="rounded-2xl bg-white p-7">
           <div className="mb-5">
-            <h3 className="text-lg font-semibold text-dark-400">Risk Events</h3>
+            <h3 className="text-lg font-semibold text-dark-400">风险事件</h3>
             <p className="text-sm text-light-500">
-              Each borrow operation can create one risk snapshot event.
+              每次借阅操作可生成一条风险快照事件。
             </p>
           </div>
 
           <div className="space-y-4">
             {data.recentEvents.length === 0 ? (
-              <p className="text-sm text-light-500">No risk events yet.</p>
+              <p className="text-sm text-light-500">暂无风险事件。</p>
             ) : (
               data.recentEvents.map((event) => (
                 <article
@@ -83,13 +82,13 @@ const Page = async () => {
                       <p className="mt-1 text-sm text-light-500">
                         {event.createdAt
                           ? dayjs(event.createdAt).format("YYYY-MM-DD HH:mm")
-                          : "Unknown time"}
+                          : "未知时间"}
                       </p>
                     </div>
 
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-semibold text-dark-400">
-                        Score {event.riskScore}
+                        评分 {event.riskScore}
                       </span>
                       <RiskBadge level={event.riskLevel} />
                     </div>
@@ -101,7 +100,7 @@ const Page = async () => {
                       href={`/admin/risk-users/${event.userId}`}
                       className="text-sm font-semibold text-primary-admin"
                     >
-                      View user details
+                      查看用户详情
                     </Link>
                   </div>
                 </article>
@@ -112,7 +111,7 @@ const Page = async () => {
 
         <div className="space-y-7">
           <div className="rounded-2xl bg-white p-7">
-            <h3 className="text-lg font-semibold text-dark-400">Risk Explanation</h3>
+            <h3 className="text-lg font-semibold text-dark-400">风险解读</h3>
             {highlightedEvent ? (
               <div className="mt-5 space-y-4">
                 <div className="rounded-xl border border-light-400 bg-light-600 p-4">
@@ -127,7 +126,7 @@ const Page = async () => {
               </div>
             ) : (
               <p className="mt-4 text-sm text-light-500">
-                Once a risk event is created, the explanation will appear here.
+                创建风险事件后，相关解读将在此展示。
               </p>
             )}
           </div>

@@ -6,10 +6,10 @@ export const buildRiskExplanation = (
   reasons: RiskReason[],
 ) => {
   if (reasons.length === 0) {
-    return `Current risk score is ${score}. No major abnormal borrowing behavior was detected, so the user is classified as ${level}.`;
+    return `当前风险评分为 ${score}，未检测到重大异常借阅行为，用户风险等级为 ${level}。`;
   }
 
   const reasonText = reasons.map((reason) => reason.message).join("; ");
 
-  return `Current risk score is ${score} and the risk level is ${level}. Key reasons: ${reasonText} Manual admin review is recommended.`;
+  return `当前风险评分为 ${score}，风险等级为 ${level}。主要原因为：${reasonText}。建议管理员进行人工审核。`;
 };

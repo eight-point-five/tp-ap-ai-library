@@ -66,24 +66,23 @@ const Page = async () => {
       <div className="mb-10 flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-            My Profile
+            个人中心
           </p>
           <h1 className="mt-3 text-4xl font-semibold text-white">
             {currentUser?.fullName}
           </h1>
           <p className="mt-3 text-light-100">
-            {currentUser?.email} · Role: {currentUser?.role} · Status: {currentUser?.status}
+            {currentUser?.email} · 角色：{currentUser?.role} · 状态：{currentUser?.status}
           </p>
           <p className="mt-3 max-w-2xl text-light-100">
-            This page now shows your real borrow records from the database, including
-            due dates and the risk level generated during borrow events.
+            此页面展示您的真实借阅记录，包括应还日期和借阅事件中产生的风险评级。
           </p>
         </div>
 
         <div className="flex gap-3">
           {currentUser?.role === "ADMIN" ? (
             <Button asChild className="bg-primary-admin text-white">
-              <Link href="/admin/risk-dashboard">Open Risk Dashboard</Link>
+              <Link href="/admin/risk-dashboard">打开风险仪表盘</Link>
             </Button>
           ) : null}
 
@@ -94,19 +93,18 @@ const Page = async () => {
               await signOut();
             }}
           >
-            <Button>Logout</Button>
+            <Button>退出登录</Button>
           </form>
         </div>
       </div>
 
-      <BookList title="Borrowed Books" books={mappedBooks} />
+      <BookList title="已借图书" books={mappedBooks} />
 
       {mappedBooks.length === 0 ? (
         <div className="mt-10 rounded-2xl bg-dark-300 p-6 text-light-100">
-          <p className="text-lg font-semibold">No borrowed books yet.</p>
+          <p className="text-lg font-semibold">暂无借阅记录。</p>
           <p className="mt-2 text-sm text-light-100/80">
-            Go back to the home page, borrow a book, and then refresh this page to
-            see the TP + AP + AI chain reflected here.
+            返回首页借阅图书，刷新此页面即可看到 TP + AP + AI 全链路数据。
           </p>
         </div>
       ) : null}

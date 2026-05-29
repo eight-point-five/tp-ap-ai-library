@@ -34,8 +34,8 @@ export const signInWithCredentials = async (
 
     return { success: true };
   } catch (error) {
-    console.log(error, "Signin error");
-    return { success: false, error: "Signin error" };
+    console.log(error, "登录失败");
+    return { success: false, error: "登录失败" };
   }
 };
 
@@ -54,7 +54,7 @@ export const signUp = async (params: AuthCredentials) => {
     .limit(1);
 
   if (existingUser.length > 0) {
-    return { success: false, error: "User already exists" };
+    return { success: false, error: "该用户已存在" };
   }
 
   const hashedPassword = await hash(password, 10);
@@ -80,7 +80,7 @@ export const signUp = async (params: AuthCredentials) => {
 
     return { success: true };
   } catch (error) {
-    console.log(error, "Signup error");
-    return { success: false, error: "Signup error" };
+    console.log(error, "注册失败");
+    return { success: false, error: "注册失败" };
   }
 };

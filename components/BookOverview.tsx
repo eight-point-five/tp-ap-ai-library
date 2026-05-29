@@ -32,8 +32,8 @@ const BookOverview = async ({
     isEligible: availableCopies > 0 && user?.status === "APPROVED",
     message:
       availableCopies <= 0
-        ? "Book is not available"
-        : "You are not eligible to borrow this book",
+        ? "该书暂无库存"
+        : "您当前不符合借阅条件",
   };
   return (
     <section className="book-overview">
@@ -42,11 +42,11 @@ const BookOverview = async ({
 
         <div className="book-info">
           <p>
-            By <span className="font-semibold text-light-200">{author}</span>
+            作者：<span className="font-semibold text-light-200">{author}</span>
           </p>
 
           <p>
-            Category{" "}
+            分类：
             <span className="font-semibold text-light-200">{genre}</span>
           </p>
 
@@ -58,11 +58,11 @@ const BookOverview = async ({
 
         <div className="book-copies">
           <p>
-            Total Books <span>{totalCopies}</span>
+            馆藏总数：<span>{totalCopies}</span>
           </p>
 
           <p>
-            Available Books <span>{availableCopies}</span>
+            可借数量：<span>{availableCopies}</span>
           </p>
         </div>
 

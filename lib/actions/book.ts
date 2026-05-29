@@ -19,7 +19,7 @@ export const borrowBook = async (params: BorrowBookParams) => {
     if (!book.length || book[0].availableCopies <= 0) {
       return {
         success: false,
-        error: "Book is not available for borrowing",
+        error: "该书暂不可借阅",
       };
     }
 
@@ -58,7 +58,7 @@ export const borrowBook = async (params: BorrowBookParams) => {
 
     return {
       success: false,
-      error: "An error occurred while borrowing the book",
+      error: "借阅过程中发生错误",
     };
   }
 };

@@ -10,7 +10,7 @@ export function evaluateRiskByRules(features: RiskFeatures): RiskResult {
     score += 30;
     reasons.push({
       code: "SHORT_TIME_FREQUENT_BORROW",
-      message: "The user borrowed too many books within 24 hours.",
+      message: "用户在24小时内借阅图书数量过多。",
       weight: 30,
     });
   }
@@ -19,7 +19,7 @@ export function evaluateRiskByRules(features: RiskFeatures): RiskResult {
     score += 25;
     reasons.push({
       code: "MULTIPLE_OVERDUE_HISTORY",
-      message: "The user has multiple overdue records in history.",
+      message: "用户历史中存在多条逾期记录。",
       weight: 25,
     });
   }
@@ -28,7 +28,7 @@ export function evaluateRiskByRules(features: RiskFeatures): RiskResult {
     score += 20;
     reasons.push({
       code: "TOO_MANY_ACTIVE_BORROWS",
-      message: "The user currently has too many active borrow records.",
+      message: "用户当前在借图书数量过多。",
       weight: 20,
     });
   }
@@ -37,7 +37,7 @@ export function evaluateRiskByRules(features: RiskFeatures): RiskResult {
     score += 25;
     reasons.push({
       code: "LONG_TERM_OVERDUE",
-      message: "The user has long-term overdue borrow records.",
+      message: "用户存在长期逾期未还记录。",
       weight: 25,
     });
   }
@@ -46,7 +46,7 @@ export function evaluateRiskByRules(features: RiskFeatures): RiskResult {
     score += 10;
     reasons.push({
       code: "UNRETURNED_OVERDUE_BOOK",
-      message: "The user still has overdue books that were not returned.",
+      message: "用户仍有逾期图书未归还。",
       weight: 10,
     });
   }
@@ -55,7 +55,7 @@ export function evaluateRiskByRules(features: RiskFeatures): RiskResult {
     score += 10;
     reasons.push({
       code: "NEW_ACCOUNT_HIGH_ACTIVITY",
-      message: "A newly registered account borrowed frequently in a short time.",
+      message: "新注册账号在短时间内频繁借阅。",
       weight: 10,
     });
   }
