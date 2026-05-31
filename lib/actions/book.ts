@@ -2,7 +2,7 @@
 
 import { db } from "@/database/drizzle";
 import { books, borrowRecords } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import dayjs from "dayjs";
 import { evaluateBorrowRisk } from "@/lib/risk/service";
 
@@ -20,6 +20,26 @@ export const borrowBook = async (params: BorrowBookParams) => {
       return {
         success: false,
         error: "该书暂不可借阅",
+      };
+    }
+
+    // 检查用户是否已借了同一本书且尚未归还
+    const existingBorrow = await db
+      .select({ id: borrowRecords.id })
+      .from(borrowRecords)
+      .where(
+        and(
+          eq(borrowRecords.userId, userId),
+          eq(borrowRecords.bookId, bookId),
+          eq(borrowRecords.status, "BORROWED"),
+        ),
+      )
+      .limit(1);
+
+    if (existingBorrow.length > 0) {
+      return {
+        success: false,
+        error: "您已借阅此书且尚未归还，不能重复借阅同一本书。",
       };
     }
 

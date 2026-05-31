@@ -28,7 +28,7 @@ const Page = async () => {
 
   const borrowedBooks = await db
     .select({
-      id: books.id,
+      id: borrowRecords.id,
       title: books.title,
       author: books.author,
       genre: books.genre,
