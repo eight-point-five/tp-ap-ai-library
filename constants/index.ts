@@ -41,7 +41,7 @@ export const adminSideBarLinks = [
   {
     img: "/icons/admin/home.svg",
     route: "/admin/risk-dashboard",
-    text: "风险仪表盘",
+    text: "风险监控",
   },
 ];
 

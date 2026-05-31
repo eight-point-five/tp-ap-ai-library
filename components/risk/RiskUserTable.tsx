@@ -30,7 +30,7 @@ const RiskUserTable = ({ users }: { users: RiskUserRow[] }) => {
             <th className="py-3 pr-4">等级</th>
             <th className="py-3 pr-4">在借</th>
             <th className="py-3 pr-4">逾期</th>
-            <th className="py-3 pr-4">24h借阅</th>
+            <th className="py-3 pr-4">近24h借阅</th>
             <th className="py-3">操作</th>
           </tr>
         </thead>

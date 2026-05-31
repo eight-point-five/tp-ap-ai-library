@@ -82,7 +82,7 @@ const Page = async () => {
         <div className="flex gap-3">
           {currentUser?.role === "ADMIN" ? (
             <Button asChild className="bg-primary-admin text-white">
-              <Link href="/admin/risk-dashboard">打开风险仪表盘</Link>
+              <Link href="/admin/risk-dashboard">打开风险监控</Link>
             </Button>
           ) : null}
 

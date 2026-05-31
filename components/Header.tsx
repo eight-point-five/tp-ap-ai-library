@@ -40,7 +40,7 @@ const Header = async ({ session }: { session: Session }) => {
               href="/admin/risk-dashboard"
               className="font-medium text-primary hover:text-light-200"
             >
-              风险仪表盘
+              风险监控
             </Link>
           </li>
         ) : null}

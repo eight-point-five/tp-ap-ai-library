@@ -10,7 +10,7 @@ const Page = () => {
         借阅申请控制台
       </h2>
       <p className="mt-3 max-w-3xl text-sm text-light-500">
-        原侧边栏要求此路由，故设为占位页面以避免 404。在当前演示版本中，借阅操作直接从图书详情页触发。
+        这个功能不是演示的重点，时间精力有限，该页面暂时置空。
       </p>
 
       <div className="mt-8 rounded-2xl border border-light-400 bg-light-600 p-6">
@@ -25,7 +25,7 @@ const Page = () => {
             前往图书馆
           </Link>
           <Link href="/admin/risk-dashboard" className="font-semibold text-primary-admin">
-            打开风险仪表盘
+            打开风险监控
           </Link>
         </div>
       </div>
