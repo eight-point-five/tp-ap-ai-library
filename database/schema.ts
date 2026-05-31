@@ -32,6 +32,14 @@ export const RISK_EVENT_TYPE_ENUM = pgEnum("risk_event_type", [
   "RENEW",
   "RETURN",
 ]);
+export const CONTROL_STATUS_ENUM = pgEnum("control_status", [
+  "NORMAL",
+  "WATCH",
+  "REVIEW",
+  "BLOCKED",
+]);
+export const LLM_PROVIDER_ENUM = pgEnum("llm_provider", ["DOUBAO", "QWEN"]);
+export const LLM_SCOPE_ENUM = pgEnum("llm_scope", ["USER", "ADMIN"]);
 
 export const users = pgTable("users", {
   id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
@@ -51,6 +59,7 @@ export const users = pgTable("users", {
 export const books = pgTable("books", {
   id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
   title: varchar("title", { length: 255 }).notNull(),
+  isbn: varchar("isbn", { length: 32 }).unique(),
   author: varchar("author", { length: 255 }).notNull(),
   genre: text("genre").notNull(),
   rating: integer("rating").notNull(),
@@ -117,6 +126,14 @@ export const userRiskProfiles = pgTable("user_risk_profiles", {
   recent7dBorrowCount: integer("recent_7d_borrow_count").notNull().default(0),
   recent24hBorrowCount: integer("recent_24h_borrow_count").notNull().default(0),
   abnormalEventCount: integer("abnormal_event_count").notNull().default(0),
+  controlStatus: CONTROL_STATUS_ENUM("control_status")
+    .notNull()
+    .default("NORMAL"),
+  restrictionReason: text("restriction_reason"),
+  restrictedUntil: timestamp("restricted_until", { withTimezone: true }),
+  requiresManualReview: boolean("requires_manual_review")
+    .notNull()
+    .default(false),
   lastEvaluatedAt: timestamp("last_evaluated_at", {
     withTimezone: true,
   }).defaultNow(),
@@ -144,4 +161,18 @@ export const nlqLogs = pgTable("nlq_logs", {
   generatedQuerySummary: text("generated_query_summary").notNull(),
   resultCount: integer("result_count").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const llmProviderConfigs = pgTable("llm_provider_configs", {
+  id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
+  scope: LLM_SCOPE_ENUM("scope").notNull(),
+  provider: LLM_PROVIDER_ENUM("provider").notNull(),
+  model: varchar("model", { length: 255 }).notNull(),
+  apiBaseUrl: text("api_base_url").notNull(),
+  apiKey: text("api_key").notNull(),
+  enabled: boolean("enabled").notNull().default(false),
+  supportsVision: boolean("supports_vision").notNull().default(true),
+  systemPrompt: text("system_prompt"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });

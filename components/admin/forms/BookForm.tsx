@@ -35,6 +35,7 @@ const BookForm = ({ type, ...book }: Props) => {
       title: "",
       description: "",
       author: "",
+      isbn: "",
       genre: "",
       rating: 1,
       totalCopies: 1,
@@ -99,6 +100,25 @@ const BookForm = ({ type, ...book }: Props) => {
                 <Input
                   required
                   placeholder="请输入作者"
+                  {...field}
+                  className="book-form_input"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"isbn"}
+          render={({ field }) => (
+            <FormItem className="flex flex-col gap-1">
+              <FormLabel className="text-base font-normal text-dark-500">
+                ISBN
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter ISBN (optional)"
                   {...field}
                   className="book-form_input"
                 />

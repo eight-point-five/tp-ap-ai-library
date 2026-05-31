@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ControlStatusBadge from "@/components/risk/ControlStatusBadge";
 import RiskBadge from "@/components/risk/RiskBadge";
 
 type RiskUserRow = {
@@ -7,6 +8,8 @@ type RiskUserRow = {
   email: string;
   currentScore: number;
   currentLevel: RiskLevel;
+  controlStatus: ControlStatus;
+  restrictionReason: string | null;
   activeBorrowCount: number;
   overdueCount: number;
   recent24hBorrowCount: number;
@@ -16,29 +19,32 @@ const RiskUserTable = ({ users }: { users: RiskUserRow[] }) => {
   return (
     <div className="overflow-x-auto rounded-2xl bg-white p-7">
       <div className="mb-5">
-        <h3 className="text-lg font-semibold text-dark-400">高风险用户</h3>
+        <h3 className="text-lg font-semibold text-dark-400">
+          Risk accounts requiring attention
+        </h3>
         <p className="text-sm text-light-500">
-          以下用户需要管理员优先审核。
+          These users are high risk or already under watch, review, or block control.
         </p>
       </div>
 
       <table className="min-w-full text-left">
         <thead>
           <tr className="border-b border-light-400 text-sm text-light-500">
-            <th className="py-3 pr-4">用户</th>
-            <th className="py-3 pr-4">评分</th>
-            <th className="py-3 pr-4">等级</th>
-            <th className="py-3 pr-4">在借</th>
-            <th className="py-3 pr-4">逾期</th>
-            <th className="py-3 pr-4">近24h借阅</th>
-            <th className="py-3">操作</th>
+            <th className="py-3 pr-4">User</th>
+            <th className="py-3 pr-4">Score</th>
+            <th className="py-3 pr-4">Risk</th>
+            <th className="py-3 pr-4">Control</th>
+            <th className="py-3 pr-4">Active</th>
+            <th className="py-3 pr-4">Overdue</th>
+            <th className="py-3 pr-4">24h borrows</th>
+            <th className="py-3">Action</th>
           </tr>
         </thead>
         <tbody>
           {users.length === 0 ? (
             <tr>
-              <td className="py-6 text-sm text-light-500" colSpan={7}>
-                暂无高风险用户。
+              <td className="py-6 text-sm text-light-500" colSpan={8}>
+                No risk accounts right now.
               </td>
             </tr>
           ) : (
@@ -54,6 +60,16 @@ const RiskUserTable = ({ users }: { users: RiskUserRow[] }) => {
                 <td className="py-4 pr-4">
                   <RiskBadge level={user.currentLevel} />
                 </td>
+                <td className="py-4 pr-4">
+                  <div className="space-y-2">
+                    <ControlStatusBadge status={user.controlStatus} />
+                    {user.restrictionReason ? (
+                      <p className="max-w-52 text-xs text-light-500">
+                        {user.restrictionReason}
+                      </p>
+                    ) : null}
+                  </div>
+                </td>
                 <td className="py-4 pr-4 text-dark-400">{user.activeBorrowCount}</td>
                 <td className="py-4 pr-4 text-dark-400">{user.overdueCount}</td>
                 <td className="py-4 pr-4 text-dark-400">{user.recent24hBorrowCount}</td>
@@ -62,7 +78,7 @@ const RiskUserTable = ({ users }: { users: RiskUserRow[] }) => {
                     href={`/admin/risk-users/${user.userId}`}
                     className="font-semibold text-primary-admin"
                   >
-                    查看详情
+                    View details
                   </Link>
                 </td>
               </tr>

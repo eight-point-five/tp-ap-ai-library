@@ -1,10 +1,11 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { db } from "@/database/drizzle";
-import { books } from "@/database/schema";
 import { desc } from "drizzle-orm";
 import BookCover from "@/components/BookCover";
+import BookDiscoveryWorkbench from "@/components/search/BookDiscoveryWorkbench";
+import { Button } from "@/components/ui/button";
+import { db } from "@/database/drizzle";
+import { books } from "@/database/schema";
 
 const Page = async () => {
   const allBooks = await db
@@ -15,29 +16,39 @@ const Page = async () => {
   return (
     <section className="w-full rounded-2xl bg-white p-7">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold">全部图书</h2>
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-admin">
+            Catalog admin
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-dark-400">
+            Books and multimodal search setup
+          </h2>
+        </div>
         <Button className="bg-primary-admin" asChild>
           <Link href="/admin/books/new" className="text-white">
-            + 新增图书
+            + Add book
           </Link>
         </Button>
       </div>
 
       <div className="mt-7 w-full overflow-x-auto">
         {allBooks.length === 0 ? (
-          <p className="py-10 text-center text-light-500">暂无图书，请先添加。</p>
+          <p className="py-10 text-center text-light-500">
+            No books found yet. Add one book first.
+          </p>
         ) : (
           <table className="min-w-full text-left">
             <thead>
               <tr className="border-b border-light-400 text-sm text-light-500">
-                <th className="py-3 pr-4">封面</th>
-                <th className="py-3 pr-4">书名</th>
-                <th className="py-3 pr-4">作者</th>
-                <th className="py-3 pr-4">分类</th>
-                <th className="py-3 pr-4">评分</th>
-                <th className="py-3 pr-4">馆藏</th>
-                <th className="py-3 pr-4">可借</th>
-                <th className="py-3">操作</th>
+                <th className="py-3 pr-4">Cover</th>
+                <th className="py-3 pr-4">Title</th>
+                <th className="py-3 pr-4">Author</th>
+                <th className="py-3 pr-4">ISBN</th>
+                <th className="py-3 pr-4">Genre</th>
+                <th className="py-3 pr-4">Rating</th>
+                <th className="py-3 pr-4">Total</th>
+                <th className="py-3 pr-4">Available</th>
+                <th className="py-3">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -57,6 +68,7 @@ const Page = async () => {
                     {book.title}
                   </td>
                   <td className="py-4 pr-4 text-dark-400">{book.author}</td>
+                  <td className="py-4 pr-4 text-dark-400">{book.isbn || "-"}</td>
                   <td className="py-4 pr-4 text-dark-400">{book.genre}</td>
                   <td className="py-4 pr-4 text-dark-400">{book.rating} / 5</td>
                   <td className="py-4 pr-4 text-dark-400">
@@ -78,7 +90,7 @@ const Page = async () => {
                       href={`/books/${book.id}`}
                       className="font-semibold text-primary-admin hover:underline"
                     >
-                      查看详情
+                      View details
                     </Link>
                   </td>
                 </tr>
@@ -86,6 +98,14 @@ const Page = async () => {
             </tbody>
           </table>
         )}
+      </div>
+
+      <div className="mt-8">
+        <BookDiscoveryWorkbench
+          scope="ADMIN"
+          heading="管理员多模态检索与模型配置"
+          subheading="在这里配置豆包或千问，保留原有精确查询能力，并测试基于描述或图片的模糊找书。"
+        />
       </div>
     </section>
   );

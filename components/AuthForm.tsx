@@ -10,7 +10,9 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 import { ZodType } from "zod";
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import FileUpload from "@/components/FileUpload";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,18 +23,34 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
-import FileUpload from "@/components/FileUpload";
 import { toast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
 
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
+  onSubmit: (data: T) => Promise<{
+    success: boolean;
+    error?: string;
+    message?: string;
+  }>;
   type: "SIGN_IN" | "SIGN_UP";
 }
+
+const labelMap: Record<string, string> = {
+  fullName: "姓名",
+  email: "邮箱",
+  universityId: "学号",
+  password: "密码",
+  universityCard: "上传校园卡",
+  role: "申请角色",
+};
+
+const inputTypeMap: Record<string, string> = {
+  fullName: "text",
+  email: "email",
+  universityId: "number",
+  password: "password",
+};
 
 const AuthForm = <T extends FieldValues>({
   type,
@@ -41,7 +59,6 @@ const AuthForm = <T extends FieldValues>({
   onSubmit,
 }: Props<T>) => {
   const router = useRouter();
-
   const isSignIn = type === "SIGN_IN";
 
   const form: UseFormReturn<T> = useForm({
@@ -55,19 +72,22 @@ const AuthForm = <T extends FieldValues>({
     if (result.success) {
       toast({
         title: "操作成功",
-        description: isSignIn
-          ? "登录成功。"
-          : "注册成功。",
+        description:
+          result.message ||
+          (isSignIn
+            ? "登录成功。"
+            : "注册申请已提交，请等待管理员审核后再登录。"),
       });
 
-      router.push("/");
-    } else {
-      toast({
-        title: `${isSignIn ? "登录" : "注册"}失败`,
-        description: result.error ?? "发生未知错误。",
-        variant: "destructive",
-      });
+      router.push(isSignIn ? "/" : "/sign-in");
+      return;
     }
+
+    toast({
+      title: `${isSignIn ? "登录" : "注册"}失败`,
+      description: result.error ?? "发生未知错误。",
+      variant: "destructive",
+    });
   };
 
   return (
@@ -77,40 +97,49 @@ const AuthForm = <T extends FieldValues>({
       </h1>
       <p className="text-light-100">
         {isSignIn
-          ? "访问海量图书资源，获取最新动态"
-          : "请填写所有字段并上传有效校园卡以获取图书馆访问权限"}
+          ? "登录后继续借阅、检索和查看个人记录。"
+          : "填写完整信息并上传校园卡。你可以申请普通用户或管理员账号，均需等待已有管理员审批。"}
       </p>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
           className="w-full space-y-6"
         >
-          {Object.keys(defaultValues).map((field) => (
+          {Object.keys(defaultValues).map((fieldName) => (
             <FormField
-              key={field}
+              key={fieldName}
               control={form.control}
-              name={field as Path<T>}
+              name={fieldName as Path<T>}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="capitalize">
-                    {FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}
+                    {labelMap[field.name] || field.name}
                   </FormLabel>
                   <FormControl>
                     {field.name === "universityCard" ? (
                       <FileUpload
-                        type="image"
-                        accept="image/*"
-                        placeholder="上传校园卡"
+                        type="file"
+                        accept="image/*,.pdf,application/pdf"
+                        placeholder="上传校园卡图片或 PDF"
                         folder="ids"
                         variant="dark"
                         onFileChange={field.onChange}
+                        value={field.value}
                       />
+                    ) : field.name === "role" ? (
+                      <select
+                        {...field}
+                        className="form-input"
+                        value={String(field.value || "USER")}
+                      >
+                        <option value="USER">普通用户</option>
+                        <option value="ADMIN">管理员</option>
+                      </select>
                     ) : (
                       <Input
                         required
-                        type={
-                          FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]
-                        }
+                        type={inputTypeMap[field.name] || "text"}
                         {...field}
                         className="form-input"
                       />
@@ -123,22 +152,22 @@ const AuthForm = <T extends FieldValues>({
           ))}
 
           <Button type="submit" className="form-btn">
-            {isSignIn ? "登录" : "注册"}
+            {isSignIn ? "登录" : "提交注册申请"}
           </Button>
         </form>
       </Form>
 
-      <p className="text-center text-base font-medium">
-        {isSignIn ? "还没有账号？" : "已有账号？"}
-
+      <p className="text-center text-base font-medium text-light-100">
+        {isSignIn ? "还没有账号？" : "已经有账号？"}
         <Link
           href={isSignIn ? "/sign-up" : "/sign-in"}
-          className="font-bold text-primary"
+          className="ml-2 font-bold text-primary"
         >
-          {isSignIn ? "创建账号" : "登录"}
+          {isSignIn ? "立即注册" : "返回登录"}
         </Link>
       </p>
     </div>
   );
 };
+
 export default AuthForm;

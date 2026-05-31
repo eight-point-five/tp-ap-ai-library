@@ -6,6 +6,7 @@ import { books, borrowRecords, borrowRiskEvents, users } from "@/database/schema
 import { and, desc, eq } from "drizzle-orm";
 import { Button } from "@/components/ui/button";
 import BookList from "@/components/BookList";
+import BookDiscoveryWorkbench from "@/components/search/BookDiscoveryWorkbench";
 
 const Page = async () => {
   const session = await auth();
@@ -86,6 +87,9 @@ const Page = async () => {
         </div>
 
         <div className="flex gap-3">
+          <Button asChild className="bg-primary text-dark-400">
+            <Link href="/">返回首页继续借书</Link>
+          </Button>
           {currentUser?.role === "ADMIN" ? (
             <Button asChild className="bg-primary-admin text-white">
               <Link href="/admin/risk-dashboard">打开风险监控</Link>
@@ -114,6 +118,13 @@ const Page = async () => {
           </p>
         </div>
       ) : null}
+      <div className="mt-12">
+        <BookDiscoveryWorkbench
+          scope={currentUser?.role === "ADMIN" ? "ADMIN" : "USER"}
+          heading="继续用多模态方式找书"
+          subheading="既可以继续使用书名、作者、ISBN 精确查询，也可以输入自然语言描述或上传参考图片进行模糊检索。"
+        />
+      </div>
     </>
   );
 };

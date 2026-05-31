@@ -35,15 +35,23 @@ const Layout = async ({ children }: { children: ReactNode }) => {
 
   let warningScore = 0;
   let warningOverdueCount = 0;
+  let warningControlStatus: ControlStatus = "NORMAL";
+  let warningRestrictionReason: string | null = null;
 
   if (session?.user?.id) {
     const [profile] = await db
-      .select({ currentScore: userRiskProfiles.currentScore })
+      .select({
+        currentScore: userRiskProfiles.currentScore,
+        controlStatus: userRiskProfiles.controlStatus,
+        restrictionReason: userRiskProfiles.restrictionReason,
+      })
       .from(userRiskProfiles)
       .where(eq(userRiskProfiles.userId, session.user.id))
       .limit(1);
 
     warningScore = profile?.currentScore ?? 0;
+    warningControlStatus = profile?.controlStatus ?? "NORMAL";
+    warningRestrictionReason = profile?.restrictionReason ?? null;
 
     const today = new Date().toISOString().slice(0, 10);
     const overdueRecords = await db
@@ -67,6 +75,8 @@ const Layout = async ({ children }: { children: ReactNode }) => {
         <WarningBanner
           score={warningScore}
           overdueCount={warningOverdueCount}
+          controlStatus={warningControlStatus}
+          restrictionReason={warningRestrictionReason}
         />
 
         <Header session={session} />

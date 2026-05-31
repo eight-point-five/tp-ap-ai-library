@@ -1,7 +1,8 @@
 import BookList from "@/components/BookList";
 import BookOverview from "@/components/BookOverview";
+import BookDiscoveryWorkbench from "@/components/search/BookDiscoveryWorkbench";
 import { db } from "@/database/drizzle";
-import { books, users } from "@/database/schema";
+import { books } from "@/database/schema";
 import { auth } from "@/auth";
 import { desc } from "drizzle-orm";
 
@@ -34,6 +35,13 @@ const Home = async () => {
         books={latestBooks.slice(1)}
         containerClassName="mt-28"
       />
+      <div className="mt-14">
+        <BookDiscoveryWorkbench
+          scope="USER"
+          heading="按书名、作者、ISBN、描述或图片找书"
+          subheading="保留原有的精确查询方式，同时支持接入豆包或千问，实现自然语言模糊找书和图片辅助找书。"
+        />
+      </div>
     </>
   );
 };

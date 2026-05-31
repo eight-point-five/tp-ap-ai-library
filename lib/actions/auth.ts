@@ -1,13 +1,13 @@
 "use server";
 
 import { eq } from "drizzle-orm";
+import { hash } from "bcryptjs";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { signIn } from "@/auth";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
-import { hash } from "bcryptjs";
-import { signIn } from "@/auth";
-import { headers } from "next/headers";
 import ratelimit from "@/lib/ratelimit";
-import { redirect } from "next/navigation";
 import { workflowClient } from "@/lib/workflow";
 import config from "@/lib/config";
 
@@ -29,18 +29,28 @@ export const signInWithCredentials = async (
     });
 
     if (result?.error) {
-      return { success: false, error: result.error };
+      return {
+        success: false,
+        error: "登录失败，请检查账号密码，或确认账号已通过管理员审核且未被封禁。",
+      };
     }
 
     return { success: true };
   } catch (error) {
-    console.log(error, "登录失败");
+    console.log(error, "login failed");
     return { success: false, error: "登录失败" };
   }
 };
 
 export const signUp = async (params: AuthCredentials) => {
-  const { fullName, email, universityId, password, universityCard } = params;
+  const {
+    fullName,
+    email,
+    universityId,
+    password,
+    universityCard,
+    role,
+  } = params;
 
   const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
   const { success } = await ratelimit.limit(ip);
@@ -66,6 +76,8 @@ export const signUp = async (params: AuthCredentials) => {
       universityId,
       password: hashedPassword,
       universityCard,
+      role,
+      status: "PENDING",
     });
 
     await workflowClient.trigger({
@@ -76,11 +88,15 @@ export const signUp = async (params: AuthCredentials) => {
       },
     });
 
-    await signInWithCredentials({ email, password });
-
-    return { success: true };
+    return {
+      success: true,
+      message:
+        role === "ADMIN"
+          ? "管理员账号申请已提交，请等待已有管理员审批。"
+          : "注册成功，账号已提交审核，请等待管理员批准。",
+    };
   } catch (error) {
-    console.log(error, "注册失败");
+    console.log(error, "signup failed");
     return { success: false, error: "注册失败" };
   }
 };

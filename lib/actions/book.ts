@@ -1,15 +1,23 @@
 "use server";
 
+import dayjs from "dayjs";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/database/drizzle";
 import { books, borrowRecords } from "@/database/schema";
-import { and, eq } from "drizzle-orm";
-import dayjs from "dayjs";
-import { evaluateBorrowRisk } from "@/lib/risk/service";
+import { evaluateBorrowRisk, getBorrowingEligibility } from "@/lib/risk/service";
 
 export const borrowBook = async (params: BorrowBookParams) => {
   const { userId, bookId } = params;
 
   try {
+    const eligibility = await getBorrowingEligibility(userId);
+    if (!eligibility.isEligible) {
+      return {
+        success: false,
+        error: eligibility.message,
+      };
+    }
+
     const book = await db
       .select({ availableCopies: books.availableCopies })
       .from(books)
@@ -19,11 +27,10 @@ export const borrowBook = async (params: BorrowBookParams) => {
     if (!book.length || book[0].availableCopies <= 0) {
       return {
         success: false,
-        error: "该书暂不可借阅",
+        error: "This book is currently unavailable.",
       };
     }
 
-    // 检查用户是否已借了同一本书且尚未归还
     const existingBorrow = await db
       .select({ id: borrowRecords.id })
       .from(borrowRecords)
@@ -39,7 +46,7 @@ export const borrowBook = async (params: BorrowBookParams) => {
     if (existingBorrow.length > 0) {
       return {
         success: false,
-        error: "您已借阅此书且尚未归还，不能重复借阅同一本书。",
+        error: "You have already borrowed this book and have not returned it yet.",
       };
     }
 
@@ -76,9 +83,21 @@ export const borrowBook = async (params: BorrowBookParams) => {
   } catch (error) {
     console.log(error);
 
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "message" in error &&
+      String(error.message).includes("borrow_records_active_unique_user_book_idx")
+    ) {
+      return {
+        success: false,
+        error: "You have already borrowed this book and have not returned it yet.",
+      };
+    }
+
     return {
       success: false,
-      error: "借阅过程中发生错误",
+      error: "An error occurred while borrowing this book.",
     };
   }
 };
@@ -92,14 +111,13 @@ export const returnBook = async (borrowRecordId: string) => {
       .limit(1);
 
     if (!record) {
-      return { success: false, error: "未找到该借阅记录。" };
+      return { success: false, error: "Borrow record not found." };
     }
 
     if (record.status === "RETURNED") {
-      return { success: false, error: "该书已经归还，无需重复操作。" };
+      return { success: false, error: "This book has already been returned." };
     }
 
-    // 更新借阅记录为已归还
     await db
       .update(borrowRecords)
       .set({
@@ -108,7 +126,6 @@ export const returnBook = async (borrowRecordId: string) => {
       })
       .where(eq(borrowRecords.id, borrowRecordId));
 
-    // 恢复图书可借数量
     const [book] = await db
       .select({ availableCopies: books.availableCopies })
       .from(books)
@@ -125,6 +142,6 @@ export const returnBook = async (borrowRecordId: string) => {
     return { success: true };
   } catch (error) {
     console.log(error);
-    return { success: false, error: "归还过程中发生错误" };
+    return { success: false, error: "An error occurred while returning the book." };
   }
 };

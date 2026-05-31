@@ -4,6 +4,7 @@ import { db } from "@/database/drizzle";
 import {
   books,
   borrowRecords,
+  borrowRiskEvents,
   riskRules,
   userRiskProfiles,
   users,
@@ -42,9 +43,17 @@ export async function buildRiskFeatures(
     .innerJoin(books, eq(borrowRecords.bookId, books.id))
     .where(eq(borrowRecords.userId, userId));
 
+  const riskEvents = await database
+    .select({ createdAt: borrowRiskEvents.createdAt })
+    .from(borrowRiskEvents)
+    .where(eq(borrowRiskEvents.userId, userId));
+
   const now = dayjs();
   const recent7dBorrowCount = records.filter((record) =>
     dayjs(record.borrowDate).isAfter(now.subtract(7, "day")),
+  ).length;
+  const recent3dBorrowCount = records.filter((record) =>
+    dayjs(record.borrowDate).isAfter(now.subtract(3, "day")),
   ).length;
   const recent24hBorrowCount = records.filter((record) =>
     dayjs(record.borrowDate).isAfter(now.subtract(24, "hour")),
@@ -57,8 +66,14 @@ export async function buildRiskFeatures(
       record.genre === currentBook?.genre &&
       dayjs(record.borrowDate).isAfter(now.subtract(30, "day")),
   ).length;
+  const uniqueGenres7dCount = new Set(
+    records
+      .filter((record) => dayjs(record.borrowDate).isAfter(now.subtract(7, "day")))
+      .map((record) => record.genre),
+  ).size;
 
   let overdueCount = 0;
+  let currentOverdueBorrowCount = 0;
   let maxOverdueDays = 0;
   let totalReturnDelayDays = 0;
   let returnedCount = 0;
@@ -76,6 +91,7 @@ export async function buildRiskFeatures(
 
     if (!record.returnDate && overdueDays > 0) {
       hasUnreturnedOverdueBooks = true;
+      currentOverdueBorrowCount += 1;
     }
 
     if (record.returnDate) {
@@ -88,16 +104,22 @@ export async function buildRiskFeatures(
     totalBorrowCount: records.length,
     activeBorrowCount,
     overdueCount,
+    currentOverdueBorrowCount,
     maxOverdueDays,
     recent7dBorrowCount,
     recent24hBorrowCount,
+    recent3dBorrowCount,
     sameCategoryRecentBorrowCount,
+    uniqueGenres7dCount,
     avgReturnDelayDays:
       returnedCount > 0
         ? Number((totalReturnDelayDays / returnedCount).toFixed(2))
         : 0,
     hasUnreturnedOverdueBooks,
     accountAgeDays: user?.createdAt ? diffInDays(now.toDate(), user.createdAt) : 0,
+    recent30dRiskEventCount: riskEvents.filter((event) =>
+      event.createdAt && dayjs(event.createdAt).isAfter(now.subtract(30, "day")),
+    ).length,
   };
 }
 
@@ -120,6 +142,10 @@ export async function upsertUserRiskProfile(
     userId,
     currentScore: risk.score,
     currentLevel: risk.level,
+    controlStatus: risk.controlStatus,
+    restrictionReason: risk.restrictionReason,
+    restrictedUntil: risk.restrictedUntil,
+    requiresManualReview: risk.controlStatus === "REVIEW",
     totalBorrowCount: features.totalBorrowCount,
     activeBorrowCount: features.activeBorrowCount,
     overdueCount: features.overdueCount,
@@ -151,35 +177,43 @@ export async function seedRiskRules(database = db) {
   await database.insert(riskRules).values([
     {
       code: "SHORT_TIME_FREQUENT_BORROW",
-      name: "短时高频借阅",
-      description: "24小时内借阅次数过高。",
+      name: "High frequency borrowing",
+      description: "Borrowing too many books within 24 hours.",
       weight: 30,
       enabled: true,
       thresholdConfig: { recent24hBorrowCount: 5 },
     },
     {
       code: "MULTIPLE_OVERDUE_HISTORY",
-      name: "多次逾期历史",
-      description: "用户存在多条逾期记录。",
+      name: "Multiple overdue records",
+      description: "User has multiple overdue records in history.",
       weight: 25,
       enabled: true,
       thresholdConfig: { overdueCount: 3 },
     },
     {
       code: "TOO_MANY_ACTIVE_BORROWS",
-      name: "在借数量过多",
-      description: "用户当前在借图书数量过多。",
+      name: "Too many active borrows",
+      description: "User currently keeps too many active borrowed books.",
       weight: 20,
       enabled: true,
       thresholdConfig: { activeBorrowCount: 8 },
     },
     {
       code: "LONG_TERM_OVERDUE",
-      name: "长期逾期",
-      description: "用户存在超过30天的逾期记录。",
+      name: "Long-term overdue",
+      description: "A book has remained overdue for more than 30 days.",
       weight: 25,
       enabled: true,
       thresholdConfig: { maxOverdueDays: 30 },
+    },
+    {
+      code: "REPEAT_RISK_ALERTS",
+      name: "Repeated risk alerts",
+      description: "The account triggered multiple risk events in the last 30 days.",
+      weight: 20,
+      enabled: true,
+      thresholdConfig: { recent30dRiskEventCount: 4 },
     },
   ]);
 }

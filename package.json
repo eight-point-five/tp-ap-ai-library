@@ -10,11 +10,14 @@
     "seed": "npx tsx database/seed.ts",
     "seed:risk": "npx tsx scripts/seed-risk-demo.ts",
     "import:test": "npx tsx scripts/import-test-data.ts",
+    "demo:refresh": "npx tsx scripts/import-test-data.ts",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
     "db:studio": "npx drizzle-kit studio",
     "local:setup": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-local.ps1",
-    "local:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-local.ps1"
+    "local:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-local.ps1",
+    "team-demo:setup": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-team-demo.ps1",
+    "team-demo:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-team-demo.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

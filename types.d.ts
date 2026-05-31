@@ -2,6 +2,7 @@ interface Book {
   id: string;
   title: string;
   author: string;
+  isbn?: string | null;
   genre: string;
   rating: number;
   totalCopies: number;
@@ -27,11 +28,13 @@ interface AuthCredentials {
   password: string;
   universityId: number;
   universityCard: string;
+  role: "USER" | "ADMIN";
 }
 
 interface BookParams {
   title: string;
   author: string;
+  isbn?: string;
   genre: string;
   rating: number;
   coverUrl: string;
@@ -50,3 +53,6 @@ interface BorrowBookParams {
 type RiskLevel = "LOW" | "MEDIUM" | "HIGH";
 type RiskDecision = "ALLOW" | "REVIEW" | "BLOCK";
 type RiskEventType = "BORROW" | "RENEW" | "RETURN";
+type ControlStatus = "NORMAL" | "WATCH" | "REVIEW" | "BLOCKED";
+type LlmProvider = "DOUBAO" | "QWEN";
+type LlmScope = "USER" | "ADMIN";

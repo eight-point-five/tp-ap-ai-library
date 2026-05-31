@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { db } from "@/database/drizzle";
 import {
   books,
@@ -26,6 +26,16 @@ export async function evaluateBorrowRisk({
   borrowRecordId: string;
   eventType?: RiskEventType;
 }) {
+  const [user] = await db
+    .select({ role: users.role })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  if (user?.role === "ADMIN") {
+    return { features: null, risk: null };
+  }
+
   const features = await buildRiskFeatures(userId, bookId);
   const risk = evaluateRiskByRules(features);
 
@@ -55,6 +65,8 @@ export async function getRiskDashboardData() {
       email: users.email,
       currentScore: userRiskProfiles.currentScore,
       currentLevel: userRiskProfiles.currentLevel,
+      controlStatus: userRiskProfiles.controlStatus,
+      restrictionReason: userRiskProfiles.restrictionReason,
       activeBorrowCount: userRiskProfiles.activeBorrowCount,
       overdueCount: userRiskProfiles.overdueCount,
       recent24hBorrowCount: userRiskProfiles.recent24hBorrowCount,
@@ -62,6 +74,7 @@ export async function getRiskDashboardData() {
     })
     .from(userRiskProfiles)
     .innerJoin(users, eq(userRiskProfiles.userId, users.id))
+    .where(eq(users.role, "USER"))
     .orderBy(desc(userRiskProfiles.currentScore));
 
   const recentEvents = await db
@@ -80,6 +93,7 @@ export async function getRiskDashboardData() {
     .from(borrowRiskEvents)
     .innerJoin(users, eq(borrowRiskEvents.userId, users.id))
     .innerJoin(books, eq(borrowRiskEvents.bookId, books.id))
+    .where(eq(users.role, "USER"))
     .orderBy(desc(borrowRiskEvents.createdAt))
     .limit(20);
 
@@ -103,6 +117,8 @@ export async function getRiskDashboardData() {
     overview: {
       highRiskUsers: profiles.filter((profile) => profile.currentLevel === "HIGH").length,
       mediumRiskUsers: profiles.filter((profile) => profile.currentLevel === "MEDIUM").length,
+      blockedUsers: profiles.filter((profile) => profile.controlStatus === "BLOCKED").length,
+      reviewUsers: profiles.filter((profile) => profile.controlStatus === "REVIEW").length,
       todayAbnormalEvents: recentEvents.filter(
         (event) => event.createdAt && dayjs(event.createdAt).isAfter(today),
       ).length,
@@ -111,7 +127,9 @@ export async function getRiskDashboardData() {
         count,
       })),
     },
-    highRiskUsers: profiles.filter((profile) => profile.currentLevel === "HIGH"),
+    highRiskUsers: profiles.filter(
+      (profile) => profile.currentLevel === "HIGH" || profile.controlStatus !== "NORMAL",
+    ),
     recentEvents,
   };
 }
@@ -125,6 +143,10 @@ export async function getUserRiskDetail(userId: string) {
       createdAt: users.createdAt,
       currentScore: userRiskProfiles.currentScore,
       currentLevel: userRiskProfiles.currentLevel,
+      controlStatus: userRiskProfiles.controlStatus,
+      restrictionReason: userRiskProfiles.restrictionReason,
+      restrictedUntil: userRiskProfiles.restrictedUntil,
+      requiresManualReview: userRiskProfiles.requiresManualReview,
       totalBorrowCount: userRiskProfiles.totalBorrowCount,
       activeBorrowCount: userRiskProfiles.activeBorrowCount,
       overdueCount: userRiskProfiles.overdueCount,
@@ -133,10 +155,11 @@ export async function getUserRiskDetail(userId: string) {
       recent24hBorrowCount: userRiskProfiles.recent24hBorrowCount,
       abnormalEventCount: userRiskProfiles.abnormalEventCount,
       updatedAt: userRiskProfiles.updatedAt,
+      role: users.role,
     })
     .from(userRiskProfiles)
     .innerJoin(users, eq(userRiskProfiles.userId, users.id))
-    .where(eq(users.id, userId))
+    .where(and(eq(users.id, userId), eq(users.role, "USER")))
     .limit(1);
 
   const events = await db
@@ -152,7 +175,8 @@ export async function getUserRiskDetail(userId: string) {
     })
     .from(borrowRiskEvents)
     .innerJoin(books, eq(borrowRiskEvents.bookId, books.id))
-    .where(eq(borrowRiskEvents.userId, userId))
+    .innerJoin(users, eq(borrowRiskEvents.userId, users.id))
+    .where(and(eq(borrowRiskEvents.userId, userId), eq(users.role, "USER")))
     .orderBy(desc(borrowRiskEvents.createdAt))
     .limit(30);
 
@@ -192,25 +216,92 @@ export async function getUserRiskDetail(userId: string) {
 }
 
 export async function getBorrowingEligibility(userId: string) {
+  const [user] = await db
+    .select({
+      role: users.role,
+      status: users.status,
+    })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  if (!user) {
+    return { isEligible: false, message: "User not found." };
+  }
+
+  if (user.role === "ADMIN") {
+    return { isEligible: true, message: "Admin accounts are exempt from risk control." };
+  }
+
+  if (user.status === "REJECTED") {
+    return {
+      isEligible: false,
+      message: "This account has been blocked by an administrator.",
+    };
+  }
+
+  if (user.status !== "APPROVED") {
+    return {
+      isEligible: false,
+      message: "This account has not been approved for borrowing yet.",
+    };
+  }
+
   const [profile] = await db
     .select({
       currentLevel: userRiskProfiles.currentLevel,
       activeBorrowCount: userRiskProfiles.activeBorrowCount,
+      controlStatus: userRiskProfiles.controlStatus,
+      restrictionReason: userRiskProfiles.restrictionReason,
+      restrictedUntil: userRiskProfiles.restrictedUntil,
+      requiresManualReview: userRiskProfiles.requiresManualReview,
     })
     .from(userRiskProfiles)
     .where(eq(userRiskProfiles.userId, userId))
     .limit(1);
 
   if (!profile) {
-    return { isEligible: true, message: "符合借阅条件" };
+    return { isEligible: true, message: "Eligible for borrowing." };
+  }
+
+  if (profile.controlStatus === "BLOCKED") {
+    return {
+      isEligible: false,
+      message:
+        profile.restrictionReason ||
+        `Borrowing is temporarily blocked until ${
+          profile.restrictedUntil
+            ? dayjs(profile.restrictedUntil).format("YYYY-MM-DD HH:mm")
+            : "further notice"
+        }.`,
+    };
+  }
+
+  if (profile.controlStatus === "REVIEW" || profile.requiresManualReview) {
+    return {
+      isEligible: false,
+      message:
+        profile.restrictionReason ||
+        "This account requires manual review before further borrowing.",
+    };
   }
 
   if (profile.currentLevel === "HIGH" && profile.activeBorrowCount >= 10) {
     return {
       isEligible: false,
-      message: "高风险用户在借数量过多，需管理员审核。",
+      message:
+        "High-risk account with too many active borrows. Manual approval is required.",
     };
   }
 
-  return { isEligible: true, message: "符合借阅条件" };
+  if (profile.controlStatus === "WATCH") {
+    return {
+      isEligible: true,
+      message:
+        profile.restrictionReason ||
+        "Borrowing is allowed, but the account is under elevated monitoring.",
+    };
+  }
+
+  return { isEligible: true, message: "Eligible for borrowing." };
 }

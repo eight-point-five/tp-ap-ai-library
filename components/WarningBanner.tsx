@@ -1,13 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Props {
   score: number;
   overdueCount: number;
+  controlStatus: ControlStatus;
+  restrictionReason?: string | null;
 }
 
-const WarningBanner = ({ score, overdueCount }: Props) => {
+const WarningBanner = ({
+  score,
+  overdueCount,
+  controlStatus,
+  restrictionReason,
+}: Props) => {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
@@ -24,7 +31,10 @@ const WarningBanner = ({ score, overdueCount }: Props) => {
     setDismissed(true);
   };
 
-  if (dismissed || (score < 50 && overdueCount === 0)) {
+  if (
+    dismissed ||
+    (score < 50 && overdueCount === 0 && controlStatus === "NORMAL")
+  ) {
     return null;
   }
 
@@ -35,21 +45,35 @@ const WarningBanner = ({ score, overdueCount }: Props) => {
   let bgColor = "bg-orange-500";
   let message = "";
 
-  if (isHighRisk && hasOverdue) {
+  if (controlStatus === "BLOCKED") {
+    bgColor = "bg-red-700";
+    message =
+      restrictionReason ||
+      "Borrowing is temporarily blocked because the account triggered severe risk rules.";
+  } else if (controlStatus === "REVIEW") {
     bgColor = "bg-red-600";
-    message = `警告：当前风险评分 ${score} 分（高风险），且有 ${overdueCount} 本图书逾期未还。请立即归还！`;
+    message =
+      restrictionReason ||
+      "Manual review is required before additional borrowing is allowed.";
+  } else if (controlStatus === "WATCH") {
+    bgColor = "bg-amber-600";
+    message =
+      restrictionReason ||
+      "The account is under elevated monitoring. Please return books on time and avoid burst borrowing.";
+  } else if (isHighRisk && hasOverdue) {
+    bgColor = "bg-red-600";
+    message = `Risk score ${score}. There are ${overdueCount} overdue borrowed books that should be returned immediately.`;
   } else if (isHighRisk) {
     bgColor = "bg-red-600";
-    message = `警告：当前风险评分 ${score} 分（高风险），建议尽快归还图书避免借阅权限受限。`;
+    message = `Risk score ${score}. The account is at high risk and may soon face borrowing restrictions.`;
   } else if (isMediumRisk && hasOverdue) {
     bgColor = "bg-orange-600";
-    message = `提示：当前风险评分 ${score} 分（中等），且有 ${overdueCount} 本图书逾期未还。请尽快归还。`;
+    message = `Risk score ${score}. There are ${overdueCount} overdue books, so the account should be corrected quickly.`;
   } else if (hasOverdue) {
     bgColor = "bg-orange-500";
-    message = `您有 ${overdueCount} 本图书已逾期，请尽快归还以免影响借阅权限。`;
+    message = `There are ${overdueCount} overdue books. Return them soon to avoid stricter control.`;
   } else {
-    bgColor = "bg-orange-500";
-    message = `当前风险评分 ${score} 分（中等），建议尽快归还图书避免风险升级。`;
+    message = `Risk score ${score}. Borrowing is still allowed, but the account should be watched closely.`;
   }
 
   return (
@@ -62,8 +86,8 @@ const WarningBanner = ({ score, overdueCount }: Props) => {
       </div>
       <button
         onClick={handleDismiss}
-        className="ml-4 text-white hover:text-gray-200 transition-colors"
-        aria-label="关闭"
+        className="ml-4 text-white transition-colors hover:text-gray-200"
+        aria-label="Dismiss"
       >
         &#10005;
       </button>

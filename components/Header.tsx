@@ -8,6 +8,10 @@ import { users } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
 const Header = async ({ session }: { session: Session }) => {
+  if (!session.user?.id) {
+    return null;
+  }
+
   const [currentUser] = await db
     .select({ role: users.role })
     .from(users)

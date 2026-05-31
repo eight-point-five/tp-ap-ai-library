@@ -23,6 +23,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (user.length === 0) return null;
 
+        if (user[0].status !== "APPROVED") {
+          return null;
+        }
+
         const isPasswordValid = await compare(
           credentials.password.toString(),
           user[0].password,

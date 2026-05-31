@@ -1,14 +1,16 @@
 import React from "react";
 import Image from "next/image";
+import { eq } from "drizzle-orm";
 import BookCover from "@/components/BookCover";
 import BorrowBook from "@/components/BorrowBook";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { getBorrowingEligibility } from "@/lib/risk/service";
 
 interface Props extends Book {
   userId: string;
 }
+
 const BookOverview = async ({
   title,
   author,
@@ -28,13 +30,26 @@ const BookOverview = async ({
     .where(eq(users.id, userId))
     .limit(1);
 
+  const riskEligibility = userId
+    ? await getBorrowingEligibility(userId)
+    : { isEligible: false, message: "Please sign in first." };
+
   const borrowingEligibility = {
-    isEligible: availableCopies > 0 && user?.status === "APPROVED",
+    isEligible:
+      availableCopies > 0 &&
+      !!user &&
+      user.status === "APPROVED" &&
+      riskEligibility.isEligible,
     message:
       availableCopies <= 0
-        ? "该书暂无库存"
-        : "您当前不符合借阅条件",
+        ? "This book is out of stock."
+        : !user
+          ? "Please sign in first."
+          : user.status !== "APPROVED"
+            ? "Your account is not approved for borrowing."
+            : riskEligibility.message,
   };
+
   return (
     <section className="book-overview">
       <div className="flex flex-1 flex-col gap-5">
@@ -46,8 +61,7 @@ const BookOverview = async ({
           </p>
 
           <p>
-            分类：
-            <span className="font-semibold text-light-200">{genre}</span>
+            分类：<span className="font-semibold text-light-200">{genre}</span>
           </p>
 
           <div className="flex flex-row gap-1">

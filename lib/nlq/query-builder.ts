@@ -18,12 +18,25 @@ export async function runParsedNaturalLanguageQuery(
   let results: unknown[] = [];
   let generatedQuerySummary = "未匹配到可执行的自然语言规则。";
 
-  if (parsed.intent === "USER_RISK_LIST") {
-    const filters: SQL[] = [];
+  if (
+    parsed.intent === "USER_RISK_LIST" ||
+    parsed.intent === "BLOCKED_USER_LIST" ||
+    parsed.intent === "REVIEW_USER_LIST"
+  ) {
+    const filters: SQL[] = [eq(users.role, "USER")];
 
     if (parsed.filters.riskLevel) {
       filters.push(
         eq(userRiskProfiles.currentLevel, parsed.filters.riskLevel as RiskLevel),
+      );
+    }
+
+    if (parsed.filters.controlStatus) {
+      filters.push(
+        eq(
+          userRiskProfiles.controlStatus,
+          parsed.filters.controlStatus as ControlStatus,
+        ),
       );
     }
 
@@ -59,19 +72,21 @@ export async function runParsedNaturalLanguageQuery(
         userId: users.id,
         fullName: users.fullName,
         email: users.email,
+        accountStatus: users.status,
         currentScore: userRiskProfiles.currentScore,
         currentLevel: userRiskProfiles.currentLevel,
+        controlStatus: userRiskProfiles.controlStatus,
         activeBorrowCount: userRiskProfiles.activeBorrowCount,
         overdueCount: userRiskProfiles.overdueCount,
         recent24hBorrowCount: userRiskProfiles.recent24hBorrowCount,
       })
       .from(userRiskProfiles)
       .innerJoin(users, eq(userRiskProfiles.userId, users.id))
-      .where(filters.length > 0 ? and(...filters) : undefined)
+      .where(and(...filters))
       .orderBy(desc(userRiskProfiles.currentScore))
       .limit(20);
 
-    generatedQuerySummary = "根据解析的风险条件筛选用户风险档案。";
+    generatedQuerySummary = "已根据解析出的风控条件筛选用户风险档案。";
   }
 
   if (parsed.intent === "RISK_EVENT_LIST") {
@@ -92,11 +107,11 @@ export async function runParsedNaturalLanguageQuery(
       .from(borrowRiskEvents)
       .innerJoin(users, eq(borrowRiskEvents.userId, users.id))
       .innerJoin(books, eq(borrowRiskEvents.bookId, books.id))
-      .where(gte(borrowRiskEvents.createdAt, since))
+      .where(and(eq(users.role, "USER"), gte(borrowRiskEvents.createdAt, since)))
       .orderBy(desc(borrowRiskEvents.createdAt))
       .limit(20);
 
-    generatedQuerySummary = `获取了最近 ${days} 天内生成的风险事件。`;
+    generatedQuerySummary = `已获取最近 ${days} 天内生成的风险事件。`;
   }
 
   await db.insert(nlqLogs).values({

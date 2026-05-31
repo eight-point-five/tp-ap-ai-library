@@ -4,8 +4,9 @@ export const signUpSchema = z.object({
   fullName: z.string().min(3),
   email: z.string().email(),
   universityId: z.coerce.number(),
-  universityCard: z.string().nonempty("请上传校园卡"),
+  universityCard: z.string().nonempty("请上传校园卡图片或 PDF"),
   password: z.string().min(8),
+  role: z.enum(["USER", "ADMIN"]),
 });
 
 export const signInSchema = z.object({
@@ -17,6 +18,12 @@ export const bookSchema = z.object({
   title: z.string().trim().min(2).max(100),
   description: z.string().trim().min(10).max(1000),
   author: z.string().trim().min(2).max(100),
+  isbn: z
+    .string()
+    .trim()
+    .max(32)
+    .optional()
+    .transform((value) => value || undefined),
   genre: z.string().trim().min(2).max(50),
   rating: z.coerce.number().min(1).max(5),
   totalCopies: z.coerce.number().int().positive().lte(10000),
