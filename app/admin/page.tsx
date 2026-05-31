@@ -11,16 +11,16 @@ const Page = () => {
             管理控制台
           </p>
           <h2 className="mt-3 text-3xl font-semibold text-dark-400">
-            本地 TP + AP + AI 演示入口
+            TP + AP + AI 演示入口
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-light-500">
-            此管理首页保留原有图书管理入口，并将风险仪表盘作为主要演示界面。
+            此管理首页保留原有图书管理入口，并将风险监控界面作为主要演示界面。
           </p>
         </div>
         <div className="flex gap-3">
           <Button className="bg-primary-admin" asChild>
             <Link href="/admin/risk-dashboard" className="text-white">
-              打开风险仪表盘
+              打开风险监控
             </Link>
           </Button>
           <Button className="bg-light-300 text-primary-admin shadow-none" asChild>

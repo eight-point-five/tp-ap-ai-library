@@ -30,7 +30,7 @@ const Page = async ({
   return (
     <section className="space-y-7">
       <Button asChild className="back-btn">
-        <Link href="/admin/risk-dashboard">返回风险仪表盘</Link>
+        <Link href="/admin/risk-dashboard">返回风险监控</Link>
       </Button>
 
       <div className="rounded-2xl bg-white p-7">
