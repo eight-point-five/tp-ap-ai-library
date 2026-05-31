@@ -18,6 +18,7 @@ interface Book {
   borrowStatus?: string;
   riskLevel?: RiskLevel | null;
   riskScore?: number | null;
+  bookId?: string;
 }
 
 interface AuthCredentials {

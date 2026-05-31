@@ -3,7 +3,7 @@ import Link from "next/link";
 import { signOut, auth } from "@/auth";
 import { db } from "@/database/drizzle";
 import { books, borrowRecords, borrowRiskEvents, users } from "@/database/schema";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { Button } from "@/components/ui/button";
 import BookList from "@/components/BookList";
 
@@ -28,7 +28,8 @@ const Page = async () => {
 
   const borrowedBooks = await db
     .select({
-      id: books.id,
+      id: borrowRecords.id,
+      bookId: books.id,
       title: books.title,
       author: books.author,
       genre: books.genre,
@@ -53,7 +54,12 @@ const Page = async () => {
       borrowRiskEvents,
       eq(borrowRiskEvents.borrowRecordId, borrowRecords.id),
     )
-    .where(eq(borrowRecords.userId, session.user.id))
+    .where(
+      and(
+        eq(borrowRecords.userId, session.user.id),
+        eq(borrowRecords.status, "BORROWED"),
+      ),
+    )
     .orderBy(desc(borrowRecords.borrowDate));
 
   const mappedBooks: Book[] = borrowedBooks.map((record) => ({
