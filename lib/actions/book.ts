@@ -82,3 +82,49 @@ export const borrowBook = async (params: BorrowBookParams) => {
     };
   }
 };
+
+export const returnBook = async (borrowRecordId: string) => {
+  try {
+    const [record] = await db
+      .select({ bookId: borrowRecords.bookId, status: borrowRecords.status })
+      .from(borrowRecords)
+      .where(eq(borrowRecords.id, borrowRecordId))
+      .limit(1);
+
+    if (!record) {
+      return { success: false, error: "未找到该借阅记录。" };
+    }
+
+    if (record.status === "RETURNED") {
+      return { success: false, error: "该书已经归还，无需重复操作。" };
+    }
+
+    // 更新借阅记录为已归还
+    await db
+      .update(borrowRecords)
+      .set({
+        status: "RETURNED",
+        returnDate: dayjs().format("YYYY-MM-DD"),
+      })
+      .where(eq(borrowRecords.id, borrowRecordId));
+
+    // 恢复图书可借数量
+    const [book] = await db
+      .select({ availableCopies: books.availableCopies })
+      .from(books)
+      .where(eq(books.id, record.bookId))
+      .limit(1);
+
+    if (book) {
+      await db
+        .update(books)
+        .set({ availableCopies: book.availableCopies + 1 })
+        .where(eq(books.id, record.bookId));
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    return { success: false, error: "归还过程中发生错误" };
+  }
+};
