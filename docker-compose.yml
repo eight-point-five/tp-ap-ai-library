@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: tp_ap_ai_library_pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: library_user
+      POSTGRES_PASSWORD: library_pass
+      POSTGRES_DB: library_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker-data/postgres:/var/lib/postgresql/data

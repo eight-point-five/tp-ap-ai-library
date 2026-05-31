@@ -1,0 +1,79 @@
+[
+  {
+    "id": "02c153f5-d3b9-4ac4-b4c4-9e53f9ffbc14",
+    "code": "SHORT_TIME_FREQUENT_BORROW",
+    "name": "Frequent Borrowing in Short Time",
+    "description": "Borrow count is too high within 24 hours.",
+    "weight": 30,
+    "enabled": true,
+    "thresholdConfig": {
+      "recent24hBorrowCount": 5
+    },
+    "createdAt": "2026-05-31T11:47:25.434Z",
+    "updatedAt": "2026-05-31T11:47:25.434Z"
+  },
+  {
+    "id": "93119206-cc26-4236-ab70-9a9b4fdf383c",
+    "code": "MULTIPLE_OVERDUE_HISTORY",
+    "name": "Multiple Overdue History",
+    "description": "The user has multiple overdue records.",
+    "weight": 25,
+    "enabled": true,
+    "thresholdConfig": {
+      "overdueCount": 3
+    },
+    "createdAt": "2026-05-31T11:47:25.434Z",
+    "updatedAt": "2026-05-31T11:47:25.434Z"
+  },
+  {
+    "id": "de2dc712-a3ec-4dc3-9ef1-32dfbd71c469",
+    "code": "TOO_MANY_ACTIVE_BORROWS",
+    "name": "Too Many Active Borrows",
+    "description": "The user has too many active borrow records.",
+    "weight": 20,
+    "enabled": true,
+    "thresholdConfig": {
+      "activeBorrowCount": 8
+    },
+    "createdAt": "2026-05-31T11:47:25.434Z",
+    "updatedAt": "2026-05-31T11:47:25.434Z"
+  },
+  {
+    "id": "f2a82fc6-2df1-4d5e-acaf-3ff98fdb082f",
+    "code": "LONG_TERM_OVERDUE",
+    "name": "Long Term Overdue",
+    "description": "The user has overdue records longer than 30 days.",
+    "weight": 25,
+    "enabled": true,
+    "thresholdConfig": {
+      "maxOverdueDays": 30
+    },
+    "createdAt": "2026-05-31T11:47:25.434Z",
+    "updatedAt": "2026-05-31T11:47:25.434Z"
+  },
+  {
+    "id": "db8125e9-b75d-4c6f-b44f-19da207f7605",
+    "code": "UNRETURNED_OVERDUE_BOOK",
+    "name": "Unreturned Overdue Book",
+    "description": "The user still has overdue books that were not returned.",
+    "weight": 10,
+    "enabled": true,
+    "thresholdConfig": {},
+    "createdAt": "2026-05-31T11:47:25.434Z",
+    "updatedAt": "2026-05-31T11:47:25.434Z"
+  },
+  {
+    "id": "55b10f01-4777-47cb-9fd7-f0e6f0d1fde0",
+    "code": "NEW_ACCOUNT_HIGH_ACTIVITY",
+    "name": "New Account High Activity",
+    "description": "A newly registered account borrowed frequently in a short time.",
+    "weight": 10,
+    "enabled": true,
+    "thresholdConfig": {
+      "accountAgeDays": 14,
+      "recent7dBorrowCount": 4
+    },
+    "createdAt": "2026-05-31T11:47:25.434Z",
+    "updatedAt": "2026-05-31T11:47:25.434Z"
+  }
+]
