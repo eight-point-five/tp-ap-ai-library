@@ -1,0 +1,1252 @@
+[
+  {
+    "id": "67435ed7-601a-4b41-974b-f876cbeaf702",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 9,
+    "createdAt": "2026-05-02T22:15:11.876Z"
+  },
+  {
+    "id": "fd2b6f80-1968-4ca0-8fe6-1dc3b2979371",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 16,
+    "createdAt": "2026-05-31T05:04:49.010Z"
+  },
+  {
+    "id": "584fd904-93a7-4888-b9fc-909ae63e2b6d",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 2,
+    "createdAt": "2026-05-20T23:44:46.274Z"
+  },
+  {
+    "id": "5689e51a-203b-4201-89ca-b8824c59224d",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 3,
+    "createdAt": "2026-05-05T05:37:42.694Z"
+  },
+  {
+    "id": "dfe9e28a-f6e2-473d-869f-f20f5966ca1d",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 3,
+    "createdAt": "2026-05-21T19:14:34.685Z"
+  },
+  {
+    "id": "17966534-feb7-4974-913d-451648f7501c",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 15,
+    "createdAt": "2026-05-11T11:56:44.824Z"
+  },
+  {
+    "id": "d76fcc0a-689e-4f2d-a79d-d89943f49de7",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 11,
+    "createdAt": "2026-05-20T03:04:37.159Z"
+  },
+  {
+    "id": "e5f1bf39-0075-4f8f-bcfc-438cfc2a3de8",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 7,
+    "createdAt": "2026-05-29T23:50:07.482Z"
+  },
+  {
+    "id": "0b89c1b5-ed27-4619-9915-3b768ad1fd0a",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 12,
+    "createdAt": "2026-05-15T05:07:34.303Z"
+  },
+  {
+    "id": "82f2e61c-a0b8-4598-87e7-82a725b0440b",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 7,
+    "createdAt": "2026-05-24T04:22:07.206Z"
+  },
+  {
+    "id": "b7e5be3f-339d-4bdd-a078-1f904ec7c26e",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 7,
+    "createdAt": "2026-05-13T07:48:21.742Z"
+  },
+  {
+    "id": "66a69cf7-2bd7-4bd4-aa97-eaefb9c0ec71",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 15,
+    "createdAt": "2026-05-27T05:31:57.829Z"
+  },
+  {
+    "id": "a2fe495b-6019-46a1-8a05-c90c1b13ea63",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 2,
+    "createdAt": "2026-05-30T18:05:36.367Z"
+  },
+  {
+    "id": "83b27038-6f6f-43b5-a851-d7c1d6b3eccd",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 6,
+    "createdAt": "2026-05-22T03:55:06.180Z"
+  },
+  {
+    "id": "3671fe8f-f95f-417e-8d52-6a5b97c41c5d",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 1,
+    "createdAt": "2026-05-13T07:46:46.495Z"
+  },
+  {
+    "id": "027fdbef-6df3-48ad-883f-c5013a6b0c73",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 17,
+    "createdAt": "2026-05-09T23:17:31.287Z"
+  },
+  {
+    "id": "96210bda-4ac8-49f9-b3d3-9eabeadb569e",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 8,
+    "createdAt": "2026-05-27T20:16:57.665Z"
+  },
+  {
+    "id": "dfb19015-e652-42a1-9f6f-eeac77557e1b",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 5,
+    "createdAt": "2026-05-21T23:14:35.894Z"
+  },
+  {
+    "id": "bfeba90d-3eb8-4de8-97f6-127d1d5cd096",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 11,
+    "createdAt": "2026-05-11T13:13:12.911Z"
+  },
+  {
+    "id": "18d89707-bf83-42fe-bedd-bd8aebcd79b7",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 3,
+    "createdAt": "2026-05-25T20:55:52.374Z"
+  },
+  {
+    "id": "31aec8bc-9b96-4959-aacc-c17c566cb982",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 7,
+    "createdAt": "2026-05-05T01:10:27.739Z"
+  },
+  {
+    "id": "75f0edf9-b093-4aae-9522-ba0f0c0a216d",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 17,
+    "createdAt": "2026-05-28T15:36:36.997Z"
+  },
+  {
+    "id": "6ced2336-94dc-40c5-9db6-9ca88e862f80",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 4,
+    "createdAt": "2026-05-03T09:04:02.261Z"
+  },
+  {
+    "id": "556af36d-794c-4076-a5c6-d93290b1a774",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 5,
+    "createdAt": "2026-05-10T23:59:10.557Z"
+  },
+  {
+    "id": "1a58dde8-d5e8-44bc-b66a-04df99ce58dd",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 1,
+    "createdAt": "2026-05-20T01:33:01.135Z"
+  },
+  {
+    "id": "2045c425-4b3e-46df-a601-29163c6f2b91",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 17,
+    "createdAt": "2026-05-24T12:01:44.799Z"
+  },
+  {
+    "id": "5446c3d4-9b20-4552-9439-f21651c277bb",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 12,
+    "createdAt": "2026-05-02T17:56:43.505Z"
+  },
+  {
+    "id": "8abc3e26-f65a-4c23-8899-a2b2f0286ea2",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 9,
+    "createdAt": "2026-05-24T18:56:30.546Z"
+  },
+  {
+    "id": "8a521ec8-4d6f-4993-a38e-371b21c0e1a4",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 8,
+    "createdAt": "2026-05-12T23:53:13.432Z"
+  },
+  {
+    "id": "36b1e001-3e20-46e8-aa0c-d646a3572fc6",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 7,
+    "createdAt": "2026-05-12T05:27:34.354Z"
+  },
+  {
+    "id": "7430fbb7-5cdd-4cf3-b1e1-b02fc64cd5e7",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 7,
+    "createdAt": "2026-05-26T00:38:27.151Z"
+  },
+  {
+    "id": "a05c7d4c-b5f1-46f8-be21-de6d698c2b37",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 15,
+    "createdAt": "2026-05-26T21:49:53.572Z"
+  },
+  {
+    "id": "0e7c59e5-7383-4804-8298-79c0b10701f2",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 0,
+    "createdAt": "2026-05-05T23:51:29.546Z"
+  },
+  {
+    "id": "65f26cf3-005c-4bf2-8d9d-141d4a486ce5",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 6,
+    "createdAt": "2026-05-01T19:18:25.930Z"
+  },
+  {
+    "id": "d9ce740b-704a-4a44-a398-bb271f2ea01b",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 5,
+    "createdAt": "2026-05-13T19:51:32.071Z"
+  },
+  {
+    "id": "94a8f38e-f07a-427a-a3ec-2a8c3986dbb0",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 15,
+    "createdAt": "2026-05-24T14:55:38.632Z"
+  },
+  {
+    "id": "7c577dc0-fabf-44e9-a10e-d081be5c9742",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 11,
+    "createdAt": "2026-05-12T02:03:23.729Z"
+  },
+  {
+    "id": "00c98e6d-b54b-4bc3-8363-1bbab66f508b",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 7,
+    "createdAt": "2026-05-03T14:23:19.328Z"
+  },
+  {
+    "id": "728b269b-58a5-4ea9-b6ec-99046ee509d6",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 11,
+    "createdAt": "2026-05-03T10:25:08.488Z"
+  },
+  {
+    "id": "c43d3ab0-3186-4ba2-89c6-dc2ff3fa5a4b",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 7,
+    "createdAt": "2026-05-03T14:02:04.882Z"
+  },
+  {
+    "id": "210c0e82-6db7-4a39-a55a-691e7dc2055b",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 8,
+    "createdAt": "2026-05-25T14:46:06.669Z"
+  },
+  {
+    "id": "d7773b2c-a661-4e2a-adf4-afd7925ab086",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 13,
+    "createdAt": "2026-05-20T22:23:21.110Z"
+  },
+  {
+    "id": "178882a6-7824-43aa-8a4b-1dbbe4392601",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 3,
+    "createdAt": "2026-05-26T07:50:26.860Z"
+  },
+  {
+    "id": "ab0a5312-c028-48bc-80de-92fa1e73967f",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 7,
+    "createdAt": "2026-05-22T02:55:42.816Z"
+  },
+  {
+    "id": "a3c931c3-8cd5-494a-b5ec-56a76b149843",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 2,
+    "createdAt": "2026-05-04T08:12:09.826Z"
+  },
+  {
+    "id": "b6bfb424-4a6f-4351-bb2f-109a9e6f766d",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 14,
+    "createdAt": "2026-05-05T05:39:20.829Z"
+  },
+  {
+    "id": "84b3b7cb-9c00-4c1a-8c6e-7e291133f441",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 8,
+    "createdAt": "2026-05-08T00:06:38.142Z"
+  },
+  {
+    "id": "99186e2d-6771-4bc5-8b94-3628a1ce408c",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 8,
+    "createdAt": "2026-05-12T08:22:41.997Z"
+  },
+  {
+    "id": "bac4962d-2cdd-4948-a682-7a584b84bad1",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 8,
+    "createdAt": "2026-05-02T14:44:59.449Z"
+  },
+  {
+    "id": "563e94b2-d795-498a-9101-46c96e5d6221",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 7,
+    "createdAt": "2026-05-05T07:53:12.847Z"
+  },
+  {
+    "id": "12e84e9c-6ecc-4363-95c8-0f9046317b08",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 5,
+    "createdAt": "2026-05-12T13:40:29.303Z"
+  },
+  {
+    "id": "a87743a1-23b0-4f2d-bb0e-57b1b78e90f2",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 15,
+    "createdAt": "2026-05-02T09:06:14.684Z"
+  },
+  {
+    "id": "f8e0785b-bd06-4462-8fb1-cf4da1170f90",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 0,
+    "createdAt": "2026-05-03T05:48:19.746Z"
+  },
+  {
+    "id": "2b812cf0-e534-43b9-97de-0079790d2ef1",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 4,
+    "createdAt": "2026-05-15T14:36:49.550Z"
+  },
+  {
+    "id": "e9ade10d-2f22-4edd-9cee-59bb4b3e0741",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 3,
+    "createdAt": "2026-05-05T10:10:23.848Z"
+  },
+  {
+    "id": "eb895faf-2e12-4815-a0ef-1708d7dd795b",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 13,
+    "createdAt": "2026-05-28T12:47:02.691Z"
+  },
+  {
+    "id": "3a00f397-41ea-43eb-95e0-e2cdd29501c8",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 11,
+    "createdAt": "2026-05-08T20:19:30.021Z"
+  },
+  {
+    "id": "9cc25d1a-cc21-4c45-a7da-abeb80e76be5",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 9,
+    "createdAt": "2026-05-08T14:25:42.207Z"
+  },
+  {
+    "id": "d4a3f021-d5f1-40d6-96d1-674de2c5df11",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 8,
+    "createdAt": "2026-05-18T21:10:15.069Z"
+  },
+  {
+    "id": "ea67346b-ed25-45bb-9f45-76b2be187dd9",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 5,
+    "createdAt": "2026-05-24T13:32:42.475Z"
+  },
+  {
+    "id": "b901b750-c01c-4492-abdf-868232443b33",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 5,
+    "createdAt": "2026-05-30T07:52:30.879Z"
+  },
+  {
+    "id": "2e16ae72-314f-4b45-b3b5-340262f32ebc",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 17,
+    "createdAt": "2026-05-23T08:55:40.882Z"
+  },
+  {
+    "id": "b4daeb0b-51d9-4c28-9ca2-b11b4f96452c",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 3,
+    "createdAt": "2026-05-14T16:09:40.083Z"
+  },
+  {
+    "id": "b44dfd22-305b-490f-ae2e-af8dc4d47d84",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 5,
+    "createdAt": "2026-05-04T13:16:03.464Z"
+  },
+  {
+    "id": "20861856-1076-445c-8d30-666c8b591be3",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 4,
+    "createdAt": "2026-05-10T22:29:57.708Z"
+  },
+  {
+    "id": "0c046dbf-8e2b-4d24-8ff1-123ecd8bd292",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 17,
+    "createdAt": "2026-05-15T20:56:16.745Z"
+  },
+  {
+    "id": "87f60e59-f6e4-428d-835b-a6b57e0b3832",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 8,
+    "createdAt": "2026-05-21T12:45:14.574Z"
+  },
+  {
+    "id": "37beb0f6-cc86-4d5e-b748-9f2dc5d2c60c",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 8,
+    "createdAt": "2026-05-13T17:50:45.619Z"
+  },
+  {
+    "id": "4b426190-d76c-4214-8cf0-b12be34b4055",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 11,
+    "createdAt": "2026-05-10T04:59:07.616Z"
+  },
+  {
+    "id": "f4273e74-78c1-4bb9-870f-73c0d81eed6f",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 7,
+    "createdAt": "2026-05-01T23:38:17.291Z"
+  },
+  {
+    "id": "bfffaa7e-fbc9-4663-a1f7-56dd8db4bc75",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 6,
+    "createdAt": "2026-05-21T05:18:26.594Z"
+  },
+  {
+    "id": "38958e96-c0af-4d09-9faf-373dfd2c1d33",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 16,
+    "createdAt": "2026-05-26T07:02:37.578Z"
+  },
+  {
+    "id": "3b9ce0ce-67b4-435f-9115-483f3add696b",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 1,
+    "createdAt": "2026-05-02T23:50:40.622Z"
+  },
+  {
+    "id": "3e160355-4c06-4b60-b9bf-993da247a979",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 3,
+    "createdAt": "2026-05-17T05:27:14.203Z"
+  },
+  {
+    "id": "97dfdb41-c8f1-44a5-9c26-0093290092bb",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 2,
+    "createdAt": "2026-05-30T00:01:31.139Z"
+  },
+  {
+    "id": "fbaa95a5-acad-4b46-935e-5e0f36bddcb3",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 13,
+    "createdAt": "2026-05-13T10:50:39.494Z"
+  },
+  {
+    "id": "08660ad9-59b9-4ab6-bf4e-98d20e4438e7",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 8,
+    "createdAt": "2026-05-07T18:15:41.126Z"
+  },
+  {
+    "id": "423ba05a-11a3-4c17-98b2-df48cedf7abf",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 7,
+    "createdAt": "2026-05-09T23:38:18.746Z"
+  },
+  {
+    "id": "30536392-5307-48fe-b401-168864f890af",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 12,
+    "createdAt": "2026-05-28T05:20:21.673Z"
+  },
+  {
+    "id": "ab18d927-7432-46ac-a89b-714250aa5e49",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 5,
+    "createdAt": "2026-05-01T23:52:05.975Z"
+  },
+  {
+    "id": "1d04c0dc-5255-4bbb-999c-b5e3c841fe9f",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 5,
+    "createdAt": "2026-05-06T07:08:10.290Z"
+  },
+  {
+    "id": "c25eaa60-5cfe-41f1-a8a0-2bcf0763583e",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 13,
+    "createdAt": "2026-05-20T12:19:38.575Z"
+  },
+  {
+    "id": "d92f1258-5b80-4b0e-9b26-881caaebd287",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 2,
+    "createdAt": "2026-05-25T00:18:05.498Z"
+  },
+  {
+    "id": "5574dcf8-97b0-44d2-9f05-b0ed8059a3ad",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 7,
+    "createdAt": "2026-05-29T08:20:04.686Z"
+  },
+  {
+    "id": "74f217ba-edb4-468f-8ef6-c40562c1abdf",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 4,
+    "createdAt": "2026-05-26T07:35:14.788Z"
+  },
+  {
+    "id": "b23c3e0e-f287-4ca0-a306-3e6e20fde414",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 17,
+    "createdAt": "2026-05-08T23:48:13.361Z"
+  },
+  {
+    "id": "4fc18e8a-9b5d-4a22-a256-58773b74c0e2",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 8,
+    "createdAt": "2026-05-20T11:24:58.411Z"
+  },
+  {
+    "id": "387e6a15-7e74-4d22-9947-5924fb0f24c6",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 8,
+    "createdAt": "2026-05-21T23:38:56.732Z"
+  },
+  {
+    "id": "308014f1-d693-4380-b398-11dd9240f955",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 8,
+    "createdAt": "2026-05-01T22:05:34.323Z"
+  },
+  {
+    "id": "686d9d44-8e25-4de9-a288-456b1614a6c5",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 3,
+    "createdAt": "2026-05-30T23:33:33.559Z"
+  },
+  {
+    "id": "b0074944-0fb0-4fec-8e32-867f02d1a4a2",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询高风险用户",
+    "parsedIntent": "HIGH_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "HIGH"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'HIGH'",
+    "resultCount": 6,
+    "createdAt": "2026-05-08T04:01:04.044Z"
+  },
+  {
+    "id": "76168f0e-45d4-46d9-babd-a17c471912ea",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近7天异常借书事件",
+    "parsedIntent": "RECENT_ABNORMAL_EVENTS",
+    "parsedFilters": {
+      "days": 7,
+      "eventType": "BORROW"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 17,
+    "createdAt": "2026-05-07T00:51:40.429Z"
+  },
+  {
+    "id": "43980fe3-aa76-4055-b2ac-eff9850342b8",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询24小时内借书超过5次的用户",
+    "parsedIntent": "FREQUENT_BORROW_24H",
+    "parsedFilters": {
+      "threshold": 5,
+      "timeWindow": "24h"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE recent_24h_borrow_count > 5",
+    "resultCount": 4,
+    "createdAt": "2026-05-17T02:05:46.097Z"
+  },
+  {
+    "id": "0fd394ba-c56d-4446-8f5e-272450351198",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询逾期超过30天的用户",
+    "parsedIntent": "LONG_OVERDUE_USERS",
+    "parsedFilters": {
+      "days": 30
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE max_overdue_days > 30",
+    "resultCount": 6,
+    "createdAt": "2026-05-11T08:04:47.740Z"
+  },
+  {
+    "id": "104dd4f2-6488-4c8c-b5b2-0181a08bebce",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询当前未归还图书超过8本的用户",
+    "parsedIntent": "MANY_ACTIVE_BORROWS",
+    "parsedFilters": {
+      "threshold": 8
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE active_borrow_count > 8",
+    "resultCount": 3,
+    "createdAt": "2026-05-07T17:22:43.554Z"
+  },
+  {
+    "id": "efdbb41e-e209-4688-b8b4-a7048ab4e685",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询中风险用户列表",
+    "parsedIntent": "MEDIUM_RISK_USERS",
+    "parsedFilters": {
+      "riskLevel": "MEDIUM"
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE current_level = 'MEDIUM'",
+    "resultCount": 16,
+    "createdAt": "2026-05-09T08:28:27.049Z"
+  },
+  {
+    "id": "6eecb8d0-2d1f-43a8-b72c-bd47876f6209",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询最近30天借阅频率最高的用户",
+    "parsedIntent": "TOP_BORROWERS_30D",
+    "parsedFilters": {
+      "days": 30,
+      "orderBy": "borrow_count",
+      "limit": 10
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles ORDER BY recent_7d_borrow_count DESC LIMIT 10",
+    "resultCount": 9,
+    "createdAt": "2026-05-17T08:03:23.782Z"
+  },
+  {
+    "id": "e5c46a2a-2662-40d9-b778-88e36d5056ea",
+    "userId": "e66078b9-9c5e-4101-a47c-56de600d0b0b",
+    "queryText": "查询有未归还逾期书籍的用户",
+    "parsedIntent": "UNRETURNED_OVERDUE",
+    "parsedFilters": {
+      "hasUnreturnedOverdue": true
+    },
+    "generatedQuerySummary": "SELECT * FROM user_risk_profiles WHERE abnormal_event_count > 0",
+    "resultCount": 5,
+    "createdAt": "2026-05-16T18:12:21.652Z"
+  },
+  {
+    "id": "6f4bf9b4-82b7-468b-b03c-e0872591ec72",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询本周新增的风险事件",
+    "parsedIntent": "WEEKLY_RISK_EVENTS",
+    "parsedFilters": {
+      "timeWindow": "week"
+    },
+    "generatedQuerySummary": "SELECT * FROM borrow_risk_events WHERE created_at > NOW() - INTERVAL '7 days'",
+    "resultCount": 11,
+    "createdAt": "2026-05-27T05:49:01.109Z"
+  },
+  {
+    "id": "0b8aac44-c464-41d4-be99-ba7b50dbaf86",
+    "userId": "02fcd1d1-0f79-4dfb-9483-673b380792cd",
+    "queryText": "查询借阅次数最多的书籍",
+    "parsedIntent": "MOST_BORROWED_BOOKS",
+    "parsedFilters": {
+      "orderBy": "borrow_count",
+      "limit": 5
+    },
+    "generatedQuerySummary": "SELECT book_id, COUNT(*) as borrow_count FROM borrow_records GROUP BY book_id ORDER BY borrow_count DESC LIMIT 5",
+    "resultCount": 6,
+    "createdAt": "2026-05-10T21:22:52.735Z"
+  }
+]
